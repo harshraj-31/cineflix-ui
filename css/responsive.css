@@ -1,0 +1,182 @@
+
+/* ==========================================================
+   CineFlix - Responsive Styles
+   ========================================================== */
+
+/* Large Desktop */
+@media (min-width:1600px){
+    .container{
+        max-width:1440px;
+    }
+
+    .hero-title{
+        max-width:900px;
+    }
+}
+
+/* Laptop */
+@media (max-width:1200px){
+
+    .section{
+        padding:3rem 0;
+    }
+
+    .movie-row{
+        gap:1rem;
+    }
+
+    .modal-body{
+        padding:1.75rem;
+    }
+}
+
+/* Tablet */
+@media (max-width:992px){
+
+    .container{
+        padding-inline:1rem;
+    }
+
+    .hero{
+        text-align:center;
+    }
+
+    .hero-content{
+        margin:auto;
+    }
+
+    .hero-meta,
+    .hero-actions{
+        justify-content:center;
+    }
+
+    .section-title{
+        font-size:1.75rem;
+    }
+
+    .movie-row{
+        scroll-snap-type:x mandatory;
+    }
+
+    .movie-card{
+        scroll-snap-align:start;
+    }
+
+    .modal-header{
+        grid-template-columns:1fr;
+    }
+
+    .modal-poster{
+        max-width:240px;
+        margin:auto;
+    }
+
+}
+
+/* Mobile */
+@media (max-width:768px){
+
+    body{
+        font-size:.95rem;
+    }
+
+    .section{
+        padding:2.5rem 0;
+    }
+
+    .hero{
+        min-height:75vh;
+    }
+
+    .hero-title{
+        font-size:2.6rem;
+    }
+
+    .hero-description{
+        font-size:1rem;
+    }
+
+    .movie-row-title{
+        font-size:1.3rem;
+    }
+
+    .movie-row{
+        gap:.85rem;
+    }
+
+    .modal-actions{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+    #backToTop{
+        width:46px;
+        height:46px;
+        right:1rem;
+        bottom:1rem;
+    }
+
+}
+
+/* Small Mobile */
+@media (max-width:576px){
+
+    .container{
+        width:min(100% - 1.2rem,100%);
+    }
+
+    .hero{
+        padding-top:calc(var(--navbar-height) + 1rem);
+    }
+
+    .hero-title{
+        font-size:2.1rem;
+    }
+
+    .hero-description{
+        font-size:.92rem;
+    }
+
+    .hero-meta{
+        gap:.6rem;
+        font-size:.85rem;
+    }
+
+    .movie-card{
+        flex-basis:145px;
+    }
+
+    .section-title{
+        font-size:1.45rem;
+    }
+
+    .modal-banner{
+        height:220px;
+    }
+
+    .modal-info h2{
+        font-size:1.55rem;
+    }
+
+    .cast-list,
+    .genre-list{
+        gap:.5rem;
+    }
+
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+        animation:none !important;
+        transition:none !important;
+        scroll-behavior:auto !important;
+    }
+
+}

@@ -1,0 +1,97 @@
+
+/* ==========================================================
+   CineFlix - CSS Variables
+   Author: Harshrajsinh Zala
+   Description: Global design tokens used throughout the app.
+   ========================================================== */
+
+:root{
+
+    /* Brand */
+    --color-primary:#C1121F;
+    --color-primary-hover:#E5383B;
+    --color-accent:#4CC9F0;
+
+    /* Backgrounds */
+    --bg-body:#0D0D0D;
+    --bg-surface:#171717;
+    --bg-elevated:#222222;
+    --bg-glass:rgba(255,255,255,.06);
+
+    /* Typography */
+    --text-primary:#FFFFFF;
+    --text-secondary:#B6B6B6;
+    --text-muted:#7E7E7E;
+
+    /* Borders */
+    --border-color:#2B2B2B;
+
+    /* Status */
+    --success:#22C55E;
+    --warning:#F59E0B;
+    --danger:#EF4444;
+
+    /* Fonts */
+    --font-heading:"Poppins",sans-serif;
+    --font-body:"Inter",sans-serif;
+
+    /* Container */
+    --container-width:1280px;
+    --container-padding:1.5rem;
+
+    /* Radius */
+    --radius-sm:8px;
+    --radius-md:14px;
+    --radius-lg:20px;
+    --radius-pill:999px;
+
+    /* Shadows */
+    --shadow-sm:0 8px 20px rgba(0,0,0,.20);
+    --shadow-md:0 12px 30px rgba(0,0,0,.35);
+    --shadow-lg:0 25px 60px rgba(0,0,0,.55);
+
+    /* Spacing */
+    --space-xs:.25rem;
+    --space-sm:.5rem;
+    --space-md:1rem;
+    --space-lg:1.5rem;
+    --space-xl:2rem;
+    --space-2xl:3rem;
+    --space-3xl:4rem;
+
+    /* Layout */
+    --navbar-height:76px;
+    --hero-height:90vh;
+    --card-width:220px;
+    --poster-ratio:2/3;
+
+    /* Animation */
+    --transition-fast:.2s ease;
+    --transition-normal:.35s ease;
+    --transition-slow:.6s ease;
+
+    /* Blur */
+    --glass-blur:18px;
+
+    /* Z-index */
+    --z-loader:9999;
+    --z-navbar:1000;
+    --z-overlay:1200;
+    --z-modal:1300;
+    --z-toast:1400;
+}
+
+@media (max-width:992px){
+    :root{
+        --container-padding:1rem;
+        --card-width:180px;
+    }
+}
+
+@media (max-width:576px){
+    :root{
+        --navbar-height:68px;
+        --card-width:150px;
+        --hero-height:75vh;
+    }
+}

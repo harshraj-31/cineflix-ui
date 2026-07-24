@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CineFlix - Premium Movie Streaming Platform UI">
+    <meta name="theme-color" content="#0D0D0D">
+
+    <title>CineFlix | Watch Beyond Reality</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/utilities.css">
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loader" aria-hidden="true">
+        <div class="loader-content">
+            <h1 class="logo">Cine<span>Flix</span></h1>
+            <div class="loader-bar">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main SPA Root -->
+    <div id="app">
+        <header id="navbar-root"></header>
+
+        <main id="view-root" role="main" aria-live="polite">
+            <!-- JavaScript Router renders all views here -->
+        </main>
+
+        <footer id="footer-root"></footer>
+    </div>
+
+    <!-- Search Overlay -->
+    <aside id="search-overlay" hidden>
+        <div id="search-root"></div>
+    </aside>
+
+    <!-- Movie Modal -->
+    <div id="modal-root"></div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Back to Top -->
+    <button id="backToTop" aria-label="Back to top">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <!-- Navigo: the only third-party JS dependency, used purely for hash-based
+         client-side routing (matches the API router.js already expects). -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/navigo/8.11.1/navigo.min.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/movies.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+
+/* ==========================================================
+   CineFlix - Reusable Animations
+   ========================================================== */
+
+/* ---------- Keyframes ---------- */
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(40px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes fadeDown{
+    from{opacity:0;transform:translateY(-40px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes fadeLeft{
+    from{opacity:0;transform:translateX(-40px);}
+    to{opacity:1;transform:translateX(0);}
+}
+
+@keyframes fadeRight{
+    from{opacity:0;transform:translateX(40px);}
+    to{opacity:1;transform:translateX(0);}
+}
+
+@keyframes zoomIn{
+    from{opacity:0;transform:scale(.92);}
+    to{opacity:1;transform:scale(1);}
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+@keyframes pulse{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.05);}
+}
+
+@keyframes shimmer{
+    0%{background-position:-200% 0;}
+    100%{background-position:200% 0;}
+}
+
+@keyframes ripple{
+    from{
+        opacity:.45;
+        transform:scale(.2);
+    }
+    to{
+        opacity:0;
+        transform:scale(2.6);
+    }
+}
+
+@keyframes rotateSlow{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+/* ---------- Utility Classes ---------- */
+
+.fade-up{
+    animation:fadeUp .8s ease both;
+}
+
+.fade-down{
+    animation:fadeDown .8s ease both;
+}
+
+.fade-left{
+    animation:fadeLeft .8s ease both;
+}
+
+.fade-right{
+    animation:fadeRight .8s ease both;
+}
+
+.zoom-in{
+    animation:zoomIn .6s ease both;
+}
+
+.float{
+    animation:float 4s ease-in-out infinite;
+}
+
+.pulse{
+    animation:pulse 2s ease-in-out infinite;
+}
+
+.rotate{
+    animation:rotateSlow 12s linear infinite;
+}
+
+/* ---------- Scroll Reveal ---------- */
+
+.reveal{
+    opacity:0;
+    transform:translateY(40px);
+    transition:
+        opacity .8s ease,
+        transform .8s ease;
+}
+
+.reveal.active{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* ---------- Hover Effects ---------- */
+
+.hover-lift{
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.hover-lift:hover{
+    transform:translateY(-8px);
+    box-shadow:var(--shadow-lg);
+}
+
+.hover-scale{
+    transition:transform .3s ease;
+}
+
+.hover-scale:hover{
+    transform:scale(1.04);
+}
+
+.hover-glow{
+    transition:
+        box-shadow .3s ease,
+        border-color .3s ease;
+}
+
+.hover-glow:hover{
+    box-shadow:0 0 24px rgba(76,201,240,.25);
+}
+
+/* ---------- Ripple ---------- */
+
+.ripple{
+    position:relative;
+    overflow:hidden;
+}
+
+.ripple::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    background:rgba(255,255,255,.35);
+    transform:scale(0);
+    opacity:0;
+}
+
+.ripple:active::after{
+    animation:ripple .45s ease;
+}
+
+/* ---------- Skeleton ---------- */
+
+.skeleton{
+    background:
+        linear-gradient(
+            90deg,
+            #202020 25%,
+            #2f2f2f 50%,
+            #202020 75%
+        );
+    background-size:200% 100%;
+    animation:shimmer 1.3s linear infinite;
+    border-radius:var(--radius-md);
+}
+
+/* ---------- Page Transition ---------- */
+
+.page-enter{
+    animation:fadeUp .45s ease both;
+}
+
+.page-exit{
+    opacity:0;
+    transform:translateY(12px);
+    transition:.25s ease;
+}

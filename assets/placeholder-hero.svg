@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111111"/>
+      <stop offset="55%" stop-color="#1d1d1d"/>
+      <stop offset="100%" stop-color="#0d0d0d"/>
+    </linearGradient>
+    <radialGradient id="heroGlow" cx="30%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#C1121F" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#C1121F" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#heroGrad)"/>
+  <rect width="1600" height="900" fill="url(#heroGlow)"/>
+  <circle cx="800" cy="420" r="90" fill="none" stroke="#4CC9F0" stroke-width="5" opacity="0.4"/>
+  <path d="M775 380 L845 420 L775 460 Z" fill="#4CC9F0" opacity="0.7"/>
+  <text x="800" y="560" font-family="Poppins, Arial, sans-serif" font-size="34" fill="#B6B6B6" text-anchor="middle">CineFlix</text>
+  <text x="800" y="600" font-family="Inter, Arial, sans-serif" font-size="18" fill="#7E7E7E" text-anchor="middle">Banner image unavailable</text>
+</svg>

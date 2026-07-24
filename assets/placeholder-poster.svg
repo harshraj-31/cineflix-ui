@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+  <defs>
+    <linearGradient id="posterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#2b2b2b"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="600" fill="url(#posterGrad)"/>
+  <circle cx="200" cy="250" r="46" fill="none" stroke="#4CC9F0" stroke-width="4" opacity="0.55"/>
+  <path d="M186 228 L226 250 L186 272 Z" fill="#4CC9F0" opacity="0.85"/>
+  <text x="200" y="340" font-family="Poppins, Arial, sans-serif" font-size="20" fill="#B6B6B6" text-anchor="middle">CineFlix</text>
+  <text x="200" y="368" font-family="Inter, Arial, sans-serif" font-size="13" fill="#7E7E7E" text-anchor="middle">Poster unavailable</text>
+</svg>

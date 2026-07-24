@@ -1,0 +1,388 @@
+
+/* ==========================================================
+   CineFlix - Global Styles
+   ========================================================== */
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:var(--font-body);
+    background:var(--bg-body);
+    color:var(--text-primary);
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+}
+
+img{
+    display:block;
+    max-width:100%;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button,
+input{
+    font:inherit;
+    border:none;
+    outline:none;
+}
+
+button{
+    cursor:pointer;
+    background:none;
+}
+
+ul{
+    list-style:none;
+}
+
+/* ---------- Selection ---------- */
+
+::selection{
+    background:var(--color-primary);
+    color:#fff;
+}
+
+/* ---------- Scrollbar ---------- */
+
+::-webkit-scrollbar{
+    width:10px;
+    height:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:var(--bg-body);
+}
+
+::-webkit-scrollbar-thumb{
+    background:#383838;
+    border-radius:999px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:var(--color-primary);
+}
+
+/* ---------- Layout ---------- */
+
+.container{
+    width:min(100% - (var(--container-padding) * 2),var(--container-width));
+    margin-inline:auto;
+}
+
+.section{
+    padding:var(--space-3xl) 0;
+}
+
+.section-title{
+    font-family:var(--font-heading);
+    font-size:2rem;
+    margin-bottom:1.5rem;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.65rem;
+    padding:.9rem 1.5rem;
+    border-radius:var(--radius-pill);
+    transition:var(--transition-normal);
+    font-weight:600;
+}
+
+.btn-primary{
+    background:var(--color-primary);
+    color:#fff;
+}
+
+.btn-primary:hover{
+    background:var(--color-primary-hover);
+    transform:translateY(-2px);
+}
+
+.btn-secondary{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(var(--glass-blur));
+    color:#fff;
+}
+
+.btn-secondary:hover{
+    background:rgba(255,255,255,.14);
+}
+
+/* ---------- Glass Card ---------- */
+
+.glass{
+    background:var(--bg-glass);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(var(--glass-blur));
+    border-radius:var(--radius-lg);
+}
+
+/* ---------- Loader ---------- */
+
+#loader{
+    position:fixed;
+    inset:0;
+    z-index:var(--z-loader);
+    display:grid;
+    place-items:center;
+    background:var(--bg-body);
+}
+
+.loader-content{
+    text-align:center;
+}
+
+.logo{
+    font-family:var(--font-heading);
+    font-size:3rem;
+    letter-spacing:.05em;
+}
+
+.logo span{
+    color:var(--color-primary);
+}
+
+.loader-bar{
+    width:220px;
+    height:5px;
+    margin:1rem auto 0;
+    background:#262626;
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.loader-bar span{
+    display:block;
+    width:45%;
+    height:100%;
+    background:linear-gradient(90deg,var(--color-primary),var(--color-accent));
+    animation:loading 1.4s linear infinite;
+}
+
+@keyframes loading{
+    from{transform:translateX(-120%);}
+    to{transform:translateX(320%);}
+}
+
+/* ---------- App ---------- */
+
+#app{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+#view-root{
+    flex:1;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.text-muted{
+    color:var(--text-secondary);
+}
+
+.text-center{
+    text-align:center;
+}
+
+.mt-xl{
+    margin-top:var(--space-xl);
+}
+
+/* ---------- Back To Top ---------- */
+
+#backToTop{
+    position:fixed;
+    right:1.5rem;
+    bottom:1.5rem;
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:var(--color-primary);
+    color:#fff;
+    display:grid;
+    place-items:center;
+    box-shadow:var(--shadow-md);
+    opacity:0;
+    visibility:hidden;
+    transition:var(--transition-normal);
+    z-index:var(--z-toast);
+}
+
+#backToTop.show{
+    opacity:1;
+    visibility:visible;
+}
+
+/* ---------- Focus ---------- */
+
+:focus-visible{
+    outline:2px solid var(--color-accent);
+    outline-offset:3px;
+}
+
+/* ==========================================================
+   Added by Claude - these components had no CSS at all yet:
+   footer, toast notifications, and the Browse/My List grid view.
+   Nothing above this line was changed.
+   ========================================================== */
+
+/* ---------- Footer ---------- */
+
+.footer{
+    background:var(--bg-surface);
+    border-top:1px solid var(--border-color);
+    padding:var(--space-2xl) 0;
+    margin-top:var(--space-3xl);
+}
+
+.footer-content{
+    width:min(100% - (var(--container-padding) * 2),var(--container-width));
+    margin-inline:auto;
+    text-align:center;
+}
+
+.footer-socials{
+    display:flex;
+    justify-content:center;
+    gap:1.25rem;
+    margin-bottom:1.5rem;
+}
+
+.footer-socials a{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:rgba(255,255,255,.06);
+    color:var(--text-secondary);
+    transition:var(--transition-fast);
+}
+
+.footer-socials a:hover{
+    background:var(--color-primary);
+    color:#fff;
+}
+
+.footer-links{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:.75rem 1.5rem;
+    margin-bottom:1.5rem;
+}
+
+.footer-links a{
+    color:var(--text-secondary);
+    font-size:.9rem;
+    transition:var(--transition-fast);
+}
+
+.footer-links a:hover{
+    color:var(--text-primary);
+}
+
+.footer-copyright{
+    color:var(--text-muted);
+    font-size:.85rem;
+}
+
+/* ---------- Toast Notifications ---------- */
+
+#toast-root{
+    position:fixed;
+    top:1.5rem;
+    right:1.5rem;
+    z-index:var(--z-toast);
+    display:flex;
+    flex-direction:column;
+    gap:.75rem;
+    pointer-events:none;
+}
+
+.toast{
+    pointer-events:auto;
+    padding:.9rem 1.4rem;
+    border-radius:var(--radius-md);
+    background:var(--bg-elevated);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:var(--shadow-md);
+    color:var(--text-primary);
+    font-size:.9rem;
+    max-width:320px;
+    opacity:0;
+    transform:translateX(30px);
+    transition:opacity .3s ease,transform .3s ease;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(0);
+}
+
+.toast-success{
+    border-color:rgba(34,197,94,.35);
+}
+
+.toast-error{
+    border-color:rgba(239,68,68,.35);
+}
+
+/* ---------- Browse / My List Grid View ---------- */
+
+.view-padding{
+    padding:calc(var(--navbar-height) + 2rem) 0 4rem;
+    width:min(100% - (var(--container-padding) * 2),var(--container-width));
+    margin-inline:auto;
+}
+
+.view-title{
+    font-family:var(--font-heading);
+    font-size:2rem;
+    margin-bottom:2rem;
+}
+
+.movie-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:1.5rem;
+}
+
+.empty-list-message{
+    grid-column:1 / -1;
+    color:var(--text-secondary);
+    padding:3rem 0;
+    text-align:center;
+}
+
+@media (max-width:576px){
+    .movie-grid{
+        grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+        gap:1rem;
+    }
+}
