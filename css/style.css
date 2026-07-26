@@ -71,7 +71,7 @@ ul{
 }
 
 ::-webkit-scrollbar-thumb{
-    background:#383838;
+    background:var(--border-color);
     border-radius:999px;
 }
 
@@ -133,7 +133,7 @@ ul{
 
 .glass{
     background:var(--bg-glass);
-    border:1px solid rgba(255,255,255,.08);
+    border:1px solid var(--border-color);
     backdrop-filter:blur(var(--glass-blur));
     border-radius:var(--radius-lg);
 }
@@ -279,7 +279,7 @@ ul{
     display:grid;
     place-items:center;
     border-radius:50%;
-    background:rgba(255,255,255,.06);
+    background:var(--bg-glass);
     color:var(--text-secondary);
     transition:var(--transition-fast);
 }
@@ -330,7 +330,7 @@ ul{
     padding:.9rem 1.4rem;
     border-radius:var(--radius-md);
     background:var(--bg-elevated);
-    border:1px solid rgba(255,255,255,.08);
+    border:1px solid var(--border-color);
     box-shadow:var(--shadow-md);
     color:var(--text-primary);
     font-size:.9rem;

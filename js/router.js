@@ -5,9 +5,15 @@
  * by fetching data from MovieDB and using UIManager to render components.
  */
 const AppRouter = (() => {
-    // Assuming Navigo is loaded and available globally.
-    // The root is set to '/', and we use the hash-based routing strategy for broader compatibility.
-    const router = new Navigo('/', { strategy: 'hash', hash: true });
+    // IMPORTANT: Navigo's `root` must match the path the app is actually served
+    // from, or it silently fails to match ANY route (including '/') - a known
+    // Navigo issue (see krasimir/navigo#314). A hardcoded '/' works when the
+    // site is served from a real web server's root, but breaks when the file is
+    // opened directly, e.g. file:///D:/JS-project/cineflix/index.html, where
+    // the pathname is nested rather than '/'. Computing it from the current
+    // location makes both cases work.
+    const computedRoot = window.location.pathname.slice(0, window.location.pathname.lastIndexOf('/') + 1) || '/';
+    const router = new Navigo(computedRoot, { hash: true });
 
     /**
      * Updates the active state of navigation links based on the current route.
@@ -34,6 +40,7 @@ const AppRouter = (() => {
      * @private
      */
     const _renderHomePage = () => {
+        document.body.classList.add('has-hero');
         const pageFragment = document.createDocumentFragment();
 
         // 1. Create and add the Hero section
@@ -83,6 +90,7 @@ const AppRouter = (() => {
      * @private
      */
     const _renderBrowsePage = () => {
+        document.body.classList.remove('has-hero');
         const pageFragment = document.createDocumentFragment();
         const mainContent = createElement('div', { className: 'main-content view-padding' });
 
@@ -111,6 +119,7 @@ const AppRouter = (() => {
      * @private
      */
     const _renderMyListPage = () => {
+        document.body.classList.remove('has-hero');
         const pageFragment = document.createDocumentFragment();
         const mainContent = createElement('div', { className: 'main-content view-padding' });
 
@@ -168,6 +177,7 @@ const AppRouter = (() => {
      * @private
      */
     const _renderNotFound = () => {
+        document.body.classList.remove('has-hero');
         const notFoundFragment = document.createDocumentFragment();
         const message = createElement('h1', { className: 'view-title text-center' });
         message.textContent = '404 - Page Not Found';
@@ -179,6 +189,13 @@ const AppRouter = (() => {
      * Initializes the router and defines all application routes.
      */
     const init = () => {
+        // A completely bare load (no "#..." at all, e.g. double-clicking the
+        // file) leaves location.hash empty, which Navigo won't match against
+        // '/'. Default it before the first resolve() so home always renders.
+        if (!window.location.hash) {
+            window.location.hash = '#/';
+        }
+
         router.on({
             '/': _renderHomePage,
             '/browse': _renderBrowsePage,

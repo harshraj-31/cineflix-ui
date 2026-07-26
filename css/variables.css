@@ -79,6 +79,23 @@
     --z-overlay:1200;
     --z-modal:1300;
     --z-toast:1400;
+
+    /* "Media" text - for text that sits directly on the hero banner or movie
+       poster art, which is always a dark image/gradient regardless of site
+       theme. Deliberately NOT overridden in the light theme block below;
+       using --text-* there instead is what caused unreadable dark-on-dark
+       text in light mode (hero title/badge/description, etc). */
+    --media-text-primary:#FFFFFF;
+    --media-text-secondary:#B6B6B6;
+    --media-text-muted:#7E7E7E;
+
+    /* Scrolled navbar + full-viewport overlays (search). These were previously
+       hardcoded to an always-dark translucent color, which looked fine in dark
+       mode but produced barely-legible dark-on-dark text once light mode
+       flipped --text-secondary to a dark color. Theme-aware here instead. */
+    --navbar-scrolled-bg:rgba(13,13,13,.72);
+    --navbar-scrolled-border:rgba(255,255,255,.06);
+    --overlay-scrim:rgba(13,13,13,.97);
 }
 
 /* Light theme - toggled via the navbar theme button (see app.js), applied as
@@ -97,6 +114,9 @@
     --shadow-sm:0 8px 20px rgba(0,0,0,.08);
     --shadow-md:0 12px 30px rgba(0,0,0,.10);
     --shadow-lg:0 25px 60px rgba(0,0,0,.16);
+    --navbar-scrolled-bg:rgba(255,255,255,.72);
+    --navbar-scrolled-border:rgba(0,0,0,.06);
+    --overlay-scrim:rgba(244,244,245,.97);
 }
 
 @media (max-width:992px){

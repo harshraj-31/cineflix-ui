@@ -123,6 +123,19 @@
     gap:1rem;
 }
 
+/* Bug fix - .btn-secondary (style.css) is styled for its original home-hero
+   context, which always sits on a dark backdrop regardless of site theme.
+   Reused here on the theme-aware modal card, that fixed white-on-white
+   styling went invisible in light mode. Override just for this context. */
+.modal-actions .btn-secondary{
+    background:var(--bg-glass);
+    color:var(--text-primary);
+}
+
+.modal-actions .btn-secondary:hover{
+    background:var(--bg-elevated);
+}
+
 .modal-section{
     margin-top:2rem;
 }
@@ -141,7 +154,7 @@
 .cast-chip{
     padding:.55rem 1rem;
     border-radius:999px;
-    background:rgba(255,255,255,.06);
+    background:var(--bg-glass);
     color:var(--text-secondary);
 }
 
@@ -156,7 +169,7 @@
     border-radius:999px;
     background:rgba(76,201,240,.12);
     border:1px solid rgba(76,201,240,.2);
-    color:#d9f8ff;
+    color:var(--color-accent);
     font-size:.85rem;
 }
 
