@@ -1,25 +1,27 @@
 # CineFlix UI
 
-A modern movie streaming web interface built with **HTML**, **CSS**, and **Vanilla JavaScript**.
+A modern movie streaming web application built with **HTML**, **CSS**, and **Vanilla JavaScript**.
 
-CineFlix UI focuses on delivering a clean, responsive, and immersive streaming experience inspired by modern OTT platforms. The project emphasizes reusable UI components, smooth interactions, and responsive layouts while serving as a frontend development portfolio project.
+CineFlix UI delivers a premium streaming experience inspired by modern OTT platforms through a clean interface, reusable components, responsive layouts, and modular JavaScript architecture.
 
-> **Note:** This project is currently under active development. New features, UI improvements, and bug fixes are being added regularly.
+> **Project Status:** Active Development 🚧  
+> New features, UI enhancements, and bug fixes are continuously being implemented.
 
 ---
 
 ## Features
 
+- Responsive design
 - Modern streaming platform UI
-- Responsive layout
 - Hero banner
-- Movie & TV content sections
-- Interactive sliders
-- Search interface
-- Navigation system
-- Reusable modal components
+- Interactive movie cards
+- Search functionality
+- Responsive navigation
+- Reusable modal system
 - Smooth animations
-- Clean component-based structure
+- Dynamic content rendering
+- Local storage support
+- Modular CSS & JavaScript architecture
 
 ---
 
@@ -27,51 +29,75 @@ CineFlix UI focuses on delivering a clean, responsive, and immersive streaming e
 
 - HTML5
 - CSS3
-- JavaScript (Vanilla)
-
----
-
-## Current Status
-
-### Completed
-
-- Responsive homepage
-- Hero section
-- Navigation
-- Movie cards
-- Content sliders
-- Search UI
-- Modular CSS architecture
-- Modular JavaScript components
-
-### In Progress
-
-- Bug fixes
-- UI refinements
-- Performance improvements
-- Additional pages
-- Better responsiveness
-- Accessibility improvements
+- JavaScript (ES6)
+- Local Storage API
 
 ---
 
 ## Project Structure
 
 ```text
-cineflix-ui/
+cineflix/
+│
+├── assets/
 │
 ├── css/
+│   ├── animations.css
+│   ├── cards.css
+│   ├── hero.css
+│   ├── modal.css
+│   ├── navbar.css
+│   ├── responsive.css
+│   ├── style.css
+│   ├── utilities.css
+│   └── variables.css
+│
 ├── js/
-├── assets/
+│   ├── animations.js
+│   ├── app.js
+│   ├── modal.js
+│   ├── movies.js
+│   ├── router.js
+│   ├── search.js
+│   ├── slider.js
+│   ├── storage.js
+│   ├── ui.js
+│   └── utils.js
+│
 ├── index.html
 └── README.md
 ```
 
 ---
 
+## Current Progress
+
+### Completed
+
+- Responsive homepage
+- Hero section
+- Movie cards
+- Navigation
+- Search interface
+- Interactive sliders
+- Modal system
+- Local storage integration
+- Responsive layouts
+- Modular architecture
+
+### In Progress
+
+- UI refinements
+- Bug fixes
+- Performance optimization
+- Additional movie categories
+- Accessibility improvements
+
+---
+
 ## Preview
 
-Project screenshots will be added as development progresses.
+Project screenshots will be added once the interface reaches the next development milestone.
 
 ---
 
@@ -83,22 +109,22 @@ Clone the repository:
 git clone https://github.com/harshraj-31/cineflix-ui.git
 ```
 
-Open `index.html` in your preferred web browser.
+Navigate to the project folder and open **index.html** in your preferred web browser.
 
-No installation or additional dependencies are required.
+No additional installation or dependencies are required.
 
 ---
 
 ## Roadmap
 
-- [ ] Improve responsive layout
-- [ ] Complete search functionality
-- [ ] Add loading animations
+- [ ] Complete UI polish
+- [ ] Improve search experience
+- [ ] Add loading states
+- [ ] Optimize animations
 - [ ] Improve accessibility
-- [ ] Optimize performance
-- [ ] Add additional movie sections
-- [ ] Polish UI interactions
-- [ ] Complete project documentation
+- [ ] Add more movie categories
+- [ ] Enhance responsiveness
+- [ ] Deploy live demo
 
 ---
 
@@ -110,4 +136,4 @@ GitHub: https://github.com/harshraj-31
 
 ---
 
-Built as a frontend web development project to practice responsive design, modern UI development, and JavaScript application architecture.
+Built as a frontend development project to practice responsive web design, modern UI development, and modular JavaScript architecture.
