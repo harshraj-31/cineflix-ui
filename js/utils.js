@@ -77,6 +77,21 @@ const truncateText = (text = '', maxLength = 150) => {
 };
 
 /**
+ * Escapes HTML-significant characters so untrusted/data-driven strings can be
+ * safely interpolated into template-string markup (innerHTML) without risking
+ * markup/attribute breakout.
+ * @param {string} value
+ * @returns {string}
+ */
+const escapeHTML = (value = '') => String(value).replace(/[&<>"']/g, (ch) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+}[ch]));
+
+/**
  * Safely parses a JSON string, returning null instead of throwing on invalid input.
  * @param {string} jsonString
  * @returns {any|null}
@@ -141,6 +156,7 @@ Object.assign(window, {
     createElement,
     fragmentFromHTML,
     truncateText,
+    escapeHTML,
     safeJsonParse,
     getRandomItem,
     shuffleArray,

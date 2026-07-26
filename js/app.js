@@ -15,6 +15,7 @@
 (() => {
     const initModules = () => {
         StorageManager.init();
+        document.documentElement.setAttribute('data-theme', StorageManager.getTheme());
         UIManager.renderLayout();
         AppRouter.init();
 
@@ -74,10 +75,30 @@
                 return;
             }
 
-            // "Play" is a portfolio demo - there's no real video backend.
+            // "Play" is a portfolio demo - there's no real video backend, but we
+            // still record a Continue Watching entry so that row (and the
+            // watch-progress bar cards.css already styles for it) has real
+            // data to show on the next Home visit instead of sitting unused.
             const playBtn = e.target.closest('.play-btn');
             if (playBtn && !playBtn.classList.contains('btn-modal')) {
+                const card = playBtn.closest('[data-movie-id]');
+                const movieId = card?.dataset.movieId || playBtn.dataset.movieId;
+                if (movieId) {
+                    const progress = Math.floor(Math.random() * 71) + 10; // demo: 10-80%
+                    StorageManager.updateContinueWatching(movieId, progress);
+                }
                 Toast?.show('This is a UI demo - playback isn\u2019t wired to real video.', 'info');
+                return;
+            }
+
+            // Theme toggle (dark/light) - StorageManager already persisted a
+            // theme preference; nothing in the UI ever offered a way to change it.
+            const themeBtn = e.target.closest('#theme-toggle');
+            if (themeBtn) {
+                const next = StorageManager.getTheme() === 'dark' ? 'light' : 'dark';
+                StorageManager.setTheme(next);
+                document.documentElement.setAttribute('data-theme', next);
+                themeBtn.querySelector('i')?.setAttribute('class', `bi ${next === 'dark' ? 'bi-moon-stars' : 'bi-sun'}`);
                 return;
             }
 

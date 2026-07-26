@@ -39,6 +39,9 @@ const UIManager = (() => {
                         <button class="icon-btn" id="search-btn" aria-label="Search">
                             <i class="bi bi-search"></i>
                         </button>
+                        <button class="icon-btn" id="theme-toggle" aria-label="Toggle light/dark theme">
+                            <i class="bi ${StorageManager.getTheme() === 'dark' ? 'bi-moon-stars' : 'bi-sun'}"></i>
+                        </button>
                         <div style="position:relative;">
                             <button class="profile-btn" aria-label="Profile menu">
                                 <img src="assets/profile-avatar.svg" alt="User profile">
@@ -118,13 +121,13 @@ const UIManager = (() => {
         const html = `
             <section class="hero">
                 <div class="hero-background">
-                    <img src="${movie.heroImage}" alt="${movie.title}" onerror="this.onerror=null;this.src='assets/placeholder-hero.svg';">
+                    <img src="${escapeHTML(movie.heroImage)}" alt="${escapeHTML(movie.title)}" onerror="this.onerror=null;this.src='assets/placeholder-hero.svg';">
                 </div>
                 <div class="container">
                     <div class="hero-content">
                         <span class="hero-badge"><i class="bi bi-fire"></i> ${badgeLabel}</span>
-                        <h1 class="hero-title">${movie.title}</h1>
-                        <p class="hero-description">${truncateText(movie.plot, 180)}</p>
+                        <h1 class="hero-title">${escapeHTML(movie.title)}</h1>
+                        <p class="hero-description">${escapeHTML(truncateText(movie.plot, 180))}</p>
                         <div class="hero-meta">
                             <span><i class="bi bi-star-fill"></i> ${movie.imdbRating.toFixed(1)}</span>
                             <span>${movie.year}</span>
@@ -159,47 +162,61 @@ const UIManager = (() => {
      * @param {object} movie
      * @returns {HTMLElement|null}
      */
-    const createMovieCard = (movie) => {
+    const createMovieCard = (movie, options = {}) => {
         if (!movie) return null;
 
         const favorite = StorageManager.isFavorite(movie.id);
         const favoriteIcon = favorite ? 'bi-check-circle-fill' : 'bi-plus-circle';
         const favoriteLabel = favorite ? 'Remove from My List' : 'Add to My List';
+        const title = escapeHTML(movie.title);
 
         const card = createElement('article', {
             className: 'movie-card',
             'data-movie-id': movie.id,
         });
 
+        // Continue Watching rows pass a 0-100 progress value so the card can
+        // show the .watch-progress bar already styled in cards.css.
+        const progressHTML = typeof options.progress === 'number'
+            ? `
+                <div class="watch-progress">
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width:${Math.max(0, Math.min(100, options.progress))}%"></div>
+                    </div>
+                </div>
+            `
+            : '';
+
         const html = `
             <div class="movie-poster">
-                <img src="${movie.poster}" alt="${movie.title}" loading="lazy" onerror="this.onerror=null;this.src='assets/placeholder-poster.svg';">
+                <img src="${escapeHTML(movie.poster)}" alt="${title}" loading="lazy" onerror="this.onerror=null;this.src='assets/placeholder-poster.svg';">
             </div>
             <div class="movie-overlay">
                 <div class="movie-top">
-                    <span class="movie-badge">${movie.rated}</span>
+                    <span class="movie-badge">${escapeHTML(movie.rated)}</span>
                     <button class="favorite-btn" aria-label="${favoriteLabel}">
                         <i class="bi ${favoriteIcon}"></i>
                     </button>
                 </div>
                 <div class="movie-actions">
-                    <button class="play-btn" aria-label="Play ${movie.title}">
+                    <button class="play-btn" aria-label="Play ${title}">
                         <i class="bi bi-play-fill"></i> Play
                     </button>
-                    <button class="info-btn btn-modal" aria-label="More info about ${movie.title}">
+                    <button class="info-btn btn-modal" aria-label="More info about ${title}">
                         <i class="bi bi-info-circle"></i> Info
                     </button>
                 </div>
             </div>
             <div class="movie-content">
-                <h3 class="movie-title">${movie.title}</h3>
+                <h3 class="movie-title">${title}</h3>
                 <div class="movie-meta">
                     <span>${movie.year}</span>
                     <span class="rating"><i class="bi bi-star-fill"></i> ${movie.imdbRating.toFixed(1)}</span>
                 </div>
                 <div class="genre-tags">
-                    ${movie.genres.slice(0, 2).map((g) => `<span class="genre-tag">${g}</span>`).join('')}
+                    ${movie.genres.slice(0, 2).map((g) => `<span class="genre-tag">${escapeHTML(g)}</span>`).join('')}
                 </div>
+                ${progressHTML}
             </div>
         `;
 
@@ -235,13 +252,28 @@ const UIManager = (() => {
      * @param {string} [options.id]
      * @returns {HTMLElement}
      */
+    // Tracks every row id handed out so two rows with the same/slugified
+    // title (e.g. two custom genre rows both titled "Action") never collide.
+    const _usedRowIds = new Set();
+    const _uniqueRowId = (baseId) => {
+        if (!_usedRowIds.has(baseId)) {
+            _usedRowIds.add(baseId);
+            return baseId;
+        }
+        let suffix = 2;
+        while (_usedRowIds.has(`${baseId}-${suffix}`)) suffix += 1;
+        const id = `${baseId}-${suffix}`;
+        _usedRowIds.add(id);
+        return id;
+    };
+
     const createMovieRow = (title, movies, options = {}) => {
         const section = createElement('section', { className: 'movie-section reveal' });
-        const rowId = options.id || `row-${window.slugify(title)}`;
+        const rowId = options.id || _uniqueRowId(`row-${window.slugify(title)}`);
 
         const headerHTML = `
             <div class="movie-row-header">
-                <h2 class="movie-row-title">${title}</h2>
+                <h2 class="movie-row-title">${escapeHTML(title)}</h2>
                 <div class="slider-controls" data-row="${rowId}">
                     <button class="slider-btn prev" aria-label="Scroll left" disabled>
                         <i class="bi bi-chevron-left"></i>
@@ -262,7 +294,10 @@ const UIManager = (() => {
             }
         } else {
             movies.forEach((movie) => {
-                const card = createMovieCard(movie);
+                // Continue Watching passes { id, progress } wrapper objects;
+                // every other row passes plain movie objects.
+                const progress = options.progressById ? options.progressById[movie.id] : undefined;
+                const card = createMovieCard(movie, { progress });
                 if (card) row.appendChild(card);
             });
         }

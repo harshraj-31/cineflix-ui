@@ -46,6 +46,21 @@ const AppRouter = (() => {
         // 2. Create and add movie rows
         const mainContent = createElement('div', { className: 'main-content' });
 
+        // "Continue Watching" - previously tracked by StorageManager but never
+        // surfaced anywhere in the UI. Only shown once the user has actually
+        // pressed Play on something (see app.js's playBtn handler).
+        const continueEntries = StorageManager.getContinueWatching();
+        if (continueEntries.length > 0) {
+            const continueMovies = continueEntries
+                .map((entry) => MovieDB.getMovieById(entry.id))
+                .filter(Boolean);
+            const progressById = Object.fromEntries(continueEntries.map((e) => [e.id, e.progress]));
+
+            if (continueMovies.length > 0) {
+                mainContent.appendChild(UIManager.createMovieRow('Continue Watching', continueMovies, { progressById }));
+            }
+        }
+
         // Example rows. This can be customized or randomized further.
         mainContent.appendChild(UIManager.createMovieRow('Trending Now', shuffleArray(trendingMovies)));
         mainContent.appendChild(UIManager.createMovieRow('New Releases', MovieDB.getNewReleases()));
@@ -123,6 +138,32 @@ const AppRouter = (() => {
     };
 
     /**
+     * Renders the movie detail route (/movie/:id). This doesn't have its own
+     * page template - it opens the existing ModalManager on top of whatever
+     * page is underneath, so the modal is reachable via a real, shareable URL
+     * and responds correctly to the browser's back/forward buttons.
+     * @private
+     * @param {object} match - Navigo match object; named params live in match.data.
+     */
+    const _renderMovieDetailRoute = (match) => {
+        const movieId = match?.data?.id;
+        if (!movieId) return _renderNotFound();
+
+        // On a fresh load / hard refresh / shared link there's no page
+        // underneath the modal yet - render the home page first so closing
+        // the modal doesn't leave a blank view.
+        if (!$('#view-root').hasChildNodes()) {
+            _renderHomePage();
+        }
+
+        if (window.ModalManager) {
+            // updateUrl: false - the URL already points here, so don't push
+            // another history entry on top of the one that got us here.
+            ModalManager.open(movieId, { updateUrl: false });
+        }
+    };
+
+    /**
      * Renders a 404 Not Found page.
      * @private
      */
@@ -142,12 +183,25 @@ const AppRouter = (() => {
             '/': _renderHomePage,
             '/browse': _renderBrowsePage,
             '/my-list': _renderMyListPage,
+            '/movie/:id': _renderMovieDetailRoute,
         }).notFound(_renderNotFound).resolve();
 
         router.hooks({
             after: (match) => {
                 _updateNavLinks(match);
                 router.updatePageLinks(); // Re-bind data-navigo links rendered by this route.
+
+                const path = match?.url ? `/${match.url}`.replace(/^\/\//, '/') : '/';
+                if (path.startsWith('/movie/')) {
+                    // The movie route handler opens the modal itself; don't
+                    // scroll the page underneath it to the top.
+                    return;
+                }
+
+                // Any other route becoming active (including the user hitting
+                // back/forward out of a /movie/:id URL) means the modal, if
+                // still open, is now stale - close it without re-navigating.
+                if (window.ModalManager) ModalManager.close({ goBack: false });
                 window.scrollTo(0, 0); // Ensure user starts at the top of the new page.
             }
         });

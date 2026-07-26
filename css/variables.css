@@ -81,6 +81,24 @@
     --z-toast:1400;
 }
 
+/* Light theme - toggled via the navbar theme button (see app.js), applied as
+   document.documentElement.dataset.theme. Only the tokens that visibly differ
+   need overriding; everything else (radius, spacing, brand colors, z-index)
+   stays the same in both themes. */
+:root[data-theme="light"]{
+    --bg-body:#F4F4F5;
+    --bg-surface:#FFFFFF;
+    --bg-elevated:#EDEDED;
+    --bg-glass:rgba(0,0,0,.045);
+    --text-primary:#141414;
+    --text-secondary:#454545;
+    --text-muted:#7A7A7A;
+    --border-color:#E0E0E0;
+    --shadow-sm:0 8px 20px rgba(0,0,0,.08);
+    --shadow-md:0 12px 30px rgba(0,0,0,.10);
+    --shadow-lg:0 25px 60px rgba(0,0,0,.16);
+}
+
 @media (max-width:992px){
     :root{
         --container-padding:1rem;
