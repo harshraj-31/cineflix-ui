@@ -167,7 +167,7 @@ ul{
     width:220px;
     height:5px;
     margin:1rem auto 0;
-    background:#262626;
+    background:var(--bg-elevated);
     border-radius:999px;
     overflow:hidden;
 }

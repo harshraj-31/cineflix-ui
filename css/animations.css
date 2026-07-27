@@ -168,9 +168,9 @@
     background:
         linear-gradient(
             90deg,
-            #202020 25%,
-            #2f2f2f 50%,
-            #202020 75%
+            var(--bg-surface) 25%,
+            var(--bg-elevated) 50%,
+            var(--bg-surface) 75%
         );
     background-size:200% 100%;
     animation:shimmer 1.3s linear infinite;

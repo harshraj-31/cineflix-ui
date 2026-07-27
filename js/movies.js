@@ -31,7 +31,7 @@ const MovieDB = (() => {
             isPopular: true,
         },
         {
-            title: 'Quantum Drift',
+            title: 'Cyber Nexus',
             year: 2023,
             rated: 'PG-13',
             runtime: 136,
@@ -49,7 +49,7 @@ const MovieDB = (() => {
             isPopular: true,
         },
         {
-            title: 'Echo Point',
+            title: 'Frozen Horizon',
             year: 2022,
             rated: 'R',
             runtime: 119,
@@ -103,7 +103,7 @@ const MovieDB = (() => {
             isPopular: true,
         },
         {
-            title: 'Black Horizon',
+            title: 'Eclipse Rising',
             year: 2023,
             rated: 'R',
             runtime: 122,
@@ -139,7 +139,7 @@ const MovieDB = (() => {
             isPopular: false,
         },
         {
-            title: 'Nova Prime',
+            title: 'Phantom Code',
             year: 2025,
             rated: 'PG',
             runtime: 110,
@@ -666,8 +666,8 @@ const MovieDB = (() => {
         return {
             ...movie,
             id,
-            poster: `assets/posters/${id}.webp`,
-            heroImage: `assets/hero/${id}.webp`,
+            poster: `assets/posters/${id}.jpg`,
+            heroImage: `assets/hero/${id}.jpg`,
             trailer: `assets/trailers/${id}.mp4`,
         };
     });
