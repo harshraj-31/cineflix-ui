@@ -403,3 +403,30 @@ body.has-hero .navbar:not(.scrolled) .nav-link.active{
         height:32px;
     }
 }
+
+/* ==========================================================
+   Polish pass - search box
+   ========================================================== */
+
+/* The input drew its own focus rectangle inside the rounded pill, and the
+   native type="search" clear button duplicated our close (X) button.
+   Focus now rings the whole pill instead. */
+.search-box input:focus,
+.search-box input:focus-visible{
+    outline:none;
+}
+
+.search-box:focus-within{
+    border-color:var(--color-accent);
+    box-shadow:0 0 0 3px rgba(76,201,240,.18);
+}
+
+.search-box input::-webkit-search-cancel-button,
+.search-box input::-webkit-search-decoration{
+    -webkit-appearance:none;
+    appearance:none;
+}
+
+.search-box input::placeholder{
+    color:var(--text-muted);
+}

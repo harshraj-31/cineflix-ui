@@ -197,3 +197,78 @@
 .hero-scroll{
     pointer-events:none;
 }
+
+/* ==========================================================
+   Polish pass
+   ========================================================== */
+
+/* Light mode: the 180px fade into the (light) page background washed a grey
+   band over the Play / More Info buttons. Keep the fade short so the
+   buttons stay on the dark image, with a clean edge below. */
+:root[data-theme="light"] .hero-gradient-bottom{
+    height:72px;
+}
+
+@media (max-width:768px){
+    /* Text is centered over the busiest part of the art on phones - give it
+       a stronger scrim so the description stays readable. */
+    .hero::before{
+        background:linear-gradient(to top, #0d0d0d 8%, rgba(13,13,13,.72) 50%, rgba(13,13,13,.35) 100%);
+    }
+
+    .hero-description{
+        display:-webkit-box;
+        -webkit-line-clamp:3;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+    }
+
+    /* The "Scroll" cue is a desktop affordance; on phones it just sat in the
+       gap under the buttons. */
+    .hero-scroll{
+        display:none;
+    }
+
+    .hero{
+        padding-bottom:2rem;
+    }
+
+    .hero + .main-content .movie-section:first-child{
+        margin-top:1.75rem;
+    }
+}
+
+/* Tablets: responsive.css centers the hero text with `margin:auto`, but in
+   this flex container that also centered it vertically - the content floated
+   mid-hero with ~270px of empty space under the buttons. Center horizontally
+   only, and cap the hero on tall portrait screens (90vh of an iPad is
+   over 1000px). */
+@media (max-width:992px){
+    .hero-content{
+        margin-block:0;
+    }
+
+    /* The original tablet rule (align-items:center above) centered the text
+       vertically, leaving a big empty band between the buttons and the first
+       row. Anchor it to the bottom like desktop; text stays centered. */
+    .hero{
+        align-items:flex-end;
+        padding-bottom:3rem;
+    }
+
+    /* With content anchored low, the "Scroll" cue would sit right under the
+       buttons; it's a desktop affordance anyway. */
+    .hero-scroll{
+        display:none;
+    }
+
+    :root{
+        --hero-height:min(80vh,760px);
+    }
+}
+
+@media (max-width:576px){
+    :root{
+        --hero-height:min(75vh,640px);
+    }
+}

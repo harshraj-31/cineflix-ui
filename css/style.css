@@ -576,3 +576,40 @@ h1[tabindex="-1"]:focus{
     width:min(100% - (var(--container-padding) * 2),var(--container-width));
     margin-inline:auto;
 }
+
+/* ==========================================================
+   Polish pass
+   ========================================================== */
+
+/* Toasts used to appear top-right, directly over the profile avatar.
+   Bottom-center is clear of the navbar and the back-to-top button. */
+#toast-root{
+    top:auto;
+    right:auto;
+    bottom:1.5rem;
+    left:50%;
+    transform:translateX(-50%);
+    align-items:center;
+    width:max-content;
+    max-width:calc(100vw - 2rem);
+}
+
+.toast{
+    transform:translateY(16px);
+    text-align:center;
+}
+
+.toast.show{
+    transform:translateY(0);
+}
+
+/* Gentle fade when switching pages, instead of content snapping in.
+   (Disabled for prefers-reduced-motion by the rule in responsive.css.) */
+#view-root > *{
+    animation:viewIn .35s ease both;
+}
+
+@keyframes viewIn{
+    from{opacity:0;transform:translateY(8px);}
+    to{opacity:1;transform:none;}
+}

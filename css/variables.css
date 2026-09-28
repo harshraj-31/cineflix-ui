@@ -133,3 +133,21 @@
         --hero-height:75vh;
     }
 }
+
+/* ==========================================================
+   Polish pass
+   ========================================================== */
+
+/* Tell the browser which theme we're in, so native pieces (form controls,
+   the page scrollbar on Firefox/Safari, autofill) match instead of staying
+   light-grey in dark mode. */
+:root{
+    color-scheme:dark;
+    --rating:#FFD54A;
+}
+
+:root[data-theme="light"]{
+    color-scheme:light;
+    /* The dark-mode star yellow is unreadable on white cards. */
+    --rating:#B7791F;
+}

@@ -261,3 +261,34 @@
 .modal-poster img{
     height:auto;
 }
+
+/* ==========================================================
+   Polish pass
+   ========================================================== */
+
+/* Six "More Like This" cards in a 160px-min grid gave five per row on
+   desktop and one orphan below. 140px fits all six on one row. */
+.similar-grid{
+    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+}
+
+@media (max-width:576px){
+    .similar-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+/* "More Like This" cards are ~140px wide - too narrow for year, runtime and
+   rating on one line (the rating got cut off) or for two genre tags. */
+.similar-grid .movie-runtime,
+.similar-grid .genre-tag:nth-child(n+2){
+    display:none;
+}
+
+.similar-grid .movie-content{
+    padding:.75rem .8rem .85rem;
+}
+
+.similar-grid .movie-title{
+    font-size:.95rem;
+}

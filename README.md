@@ -132,10 +132,10 @@ cineflix/
 - Poster and banner artwork for every title
 - Image optimization: WebP, right-sized posters, lazy-loaded cards, high-priority hero
 - Screenshots in this README
+- UI polish pass across desktop, tablet and phone in both themes
 
 ### In Progress
 
-- UI refinements
 - Additional movie categories
 
 ---
@@ -163,7 +163,7 @@ No additional installation or dependencies are required. (An internet connection
 - [x] Add artwork for all 36 titles
 - [x] Optimize images (WebP, right-sized posters)
 - [x] Add screenshots to this README
-- [ ] Complete UI polish
+- [x] Complete UI polish
 - [ ] Deploy live demo (GitHub Pages)
 
 ---

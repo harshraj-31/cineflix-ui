@@ -31,13 +31,16 @@ const ModalManager = (() => {
         const id = escapeHTML(movie.id);
         const headingId = `modal-title-${id}`;
 
+        // Skip placeholder values: unreleased titles carry "N/A" box office and
+        // vote counts, which read as broken data in the Details list.
+        const isReal = (v) => v && !/^(n\/a|tbd|unknown|awaiting release\.?)$/i.test(String(v).trim());
         const details = [
             ['Director', movie.director],
             ['Writers', (movie.writers || []).join(', ')],
             ['Awards', movie.awards],
             ['Box office', movie.boxOffice],
-            ['Ratings', movie.imdbVotes ? `${movie.imdbVotes} votes` : ''],
-        ].filter(([, value]) => value);
+            ['Ratings', isReal(movie.imdbVotes) ? `${movie.imdbVotes} votes` : ''],
+        ].filter(([, value]) => isReal(value));
 
         const html = `
             <div class="modal-overlay"></div>
@@ -169,7 +172,10 @@ const ModalManager = (() => {
         $('.modal-close', root)?.addEventListener('click', () => close());
         $('.modal-overlay', root)?.addEventListener('click', () => close());
         releaseFocusTrap = trapFocus($('.movie-modal', root));
-        $('.modal-close', root)?.focus();
+        // Focus moves into the dialog for keyboard/screen-reader users, but
+        // without drawing a ring around the close button on every mouse open
+        // (focusVisible is ignored by browsers that don't support it).
+        $('.modal-close', root)?.focus({ preventScroll: true, focusVisible: false });
 
         // Bind the data-navigo links (genre pills, similar-card titles) we just injected.
         if (window.AppRouter && typeof AppRouter.refreshLinks === 'function') AppRouter.refreshLinks();

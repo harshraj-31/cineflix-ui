@@ -389,3 +389,104 @@
 .movie-meta span{
     white-space:nowrap;
 }
+
+/* ==========================================================
+   Polish pass
+   ========================================================== */
+
+/* Hover overlay now covers only the poster. It used to span the whole card,
+   so Play/Info sat on top of the title and meta, and in light mode the
+   white card body turned into a muddy dark block on hover. */
+.movie-overlay{
+    bottom:auto;
+    aspect-ratio:2/3;
+}
+
+/* Reserve the poster area with a neutral tone so there's no empty flash
+   (white in light mode) while the image loads. */
+.movie-poster{
+    background:var(--bg-elevated);
+}
+
+/* Rating badge sits on poster art, so it's always light text - it used to
+   inherit the theme text colour and vanished in light mode. */
+.movie-badge{
+    color:#fff;
+}
+
+.rating{
+    color:var(--rating);
+}
+
+/* Slider arrows: they were dark glass on a dark page (nearly invisible),
+   and the disabled state looked identical to the enabled one. */
+.slider-btn{
+    background:var(--bg-elevated);
+    border:1px solid var(--border-color);
+    color:var(--text-primary);
+}
+
+.slider-btn:hover:not(:disabled){
+    background:var(--color-primary);
+    border-color:var(--color-primary);
+    color:#fff;
+}
+
+.slider-btn:disabled{
+    opacity:.35;
+    cursor:default;
+}
+
+/* Rows that fit entirely on screen don't need arrows at all
+   (e.g. a Continue Watching row with two titles). Set by slider.js. */
+.slider-controls.is-idle{
+    visibility:hidden;
+}
+
+/* Soft fade on whichever edge has more cards hidden behind it, so it's
+   obvious the row scrolls. Classes are toggled by slider.js. */
+.movie-row.fade-right{
+    -webkit-mask-image:linear-gradient(to right, #000 calc(100% - 64px), transparent);
+            mask-image:linear-gradient(to right, #000 calc(100% - 64px), transparent);
+}
+
+.movie-row.fade-left{
+    -webkit-mask-image:linear-gradient(to left, #000 calc(100% - 64px), transparent);
+            mask-image:linear-gradient(to left, #000 calc(100% - 64px), transparent);
+}
+
+.movie-row.fade-left.fade-right{
+    -webkit-mask-image:linear-gradient(to right, transparent, #000 64px, #000 calc(100% - 64px), transparent);
+            mask-image:linear-gradient(to right, transparent, #000 64px, #000 calc(100% - 64px), transparent);
+}
+
+/* Touch screens swipe rows directly; the arrows just take up space. */
+@media (hover:none){
+    .slider-controls{
+        display:none;
+    }
+}
+
+/* Phones: keep every card the same height. Two genre tags wrapped onto a
+   second line on ~150px cards, so rows had ragged bottoms. */
+@media (max-width:768px){
+    .genre-tag:nth-child(n+2){
+        display:none;
+    }
+
+    .movie-content{
+        padding:.8rem .85rem .9rem;
+    }
+
+    .movie-title{
+        font-size:.98rem;
+    }
+
+    .movie-meta{
+        font-size:.85rem;
+    }
+
+    .genre-tags{
+        margin-top:.6rem;
+    }
+}

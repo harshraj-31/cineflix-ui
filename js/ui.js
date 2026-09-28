@@ -232,7 +232,7 @@ const UIManager = (() => {
             </div>
             <div class="movie-content">
                 <h3 class="movie-title">
-                    <a href="/movie/${encodeURIComponent(movie.id)}" data-navigo tabindex="-1">${title}</a>
+                    <a href="/movie/${encodeURIComponent(movie.id)}" data-navigo tabindex="-1" title="${title}">${title}</a>
                 </h3>
                 <div class="movie-meta">
                     <span>${movie.year}</span>
