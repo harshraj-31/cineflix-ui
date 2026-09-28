@@ -43,7 +43,7 @@ const ModalManager = (() => {
             <div class="modal-overlay"></div>
             <div class="movie-modal" role="dialog" aria-modal="true" aria-labelledby="${headingId}" data-movie-id="${id}">
                 <div class="modal-banner">
-                    <img src="${escapeHTML(movie.heroImage)}" alt="" data-art-variant="hero">
+                    <img src="${escapeHTML(movie.heroImage)}" alt="" width="1920" height="815" decoding="async" data-art-variant="hero">
                 </div>
                 <button class="modal-close" aria-label="Close">
                     <i class="bi bi-x-lg"></i>
@@ -51,7 +51,7 @@ const ModalManager = (() => {
                 <div class="modal-body">
                     <div class="modal-header">
                         <div class="modal-poster">
-                            <img src="${escapeHTML(movie.poster)}" alt="${title} poster" data-art-variant="poster">
+                            <img src="${escapeHTML(movie.poster)}" alt="${title} poster" width="500" height="750" decoding="async" data-art-variant="poster">
                         </div>
                         <div class="modal-info">
                             <h2 id="${headingId}">${title}</h2>

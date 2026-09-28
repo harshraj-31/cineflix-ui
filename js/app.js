@@ -49,7 +49,8 @@
     /**
      * Swaps in generated artwork when a poster/banner file is missing.
      *
-     * Only 10 of 36 movies have real image files. Image `error` events don't
+     * Every title now ships with artwork, but this is a safety net for any
+     * movie added to movies.js before its images exist. Image `error` events don't
      * bubble, but they DO go through the capture phase, so one listener on
      * document covers every <img data-art-variant> the app ever renders -
      * cards, hero, modal, search results - without an inline onerror= on each.

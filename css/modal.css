@@ -242,3 +242,22 @@
     border-radius:var(--radius-pill);
     place-items:initial;
 }
+
+/* Light theme: the accent-cyan genre pills were pale cyan on white and hard
+   to read. Use a darker teal of the same hue there. */
+:root[data-theme="light"] .genre-pill{
+    background:rgba(8,120,150,.10);
+    border-color:rgba(8,120,150,.28);
+    color:#0a6f8a;
+}
+
+:root[data-theme="light"] a.genre-pill:hover{
+    background:rgba(8,120,150,.18);
+}
+
+/* The <img> now carries width/height attributes (so the browser reserves
+   space before it loads). The height attribute acts as a fixed CSS height
+   unless overridden, which beat aspect-ratio and cropped the poster. */
+.modal-poster img{
+    height:auto;
+}

@@ -369,3 +369,37 @@ body.has-hero .navbar:not(.scrolled) .nav-link.active{
 .profile-btn img{
     flex-shrink:0;
 }
+
+/* Small phones: brand + four 38px controls with desktop gaps (2rem / 1.5rem)
+   add up to ~400px, wider than a 360-390px screen, which pushed the menu
+   button off the right edge. Tighten the gaps and the avatar's padding. */
+@media (max-width:576px){
+    .navbar .container{
+        gap:.75rem;
+    }
+
+    .nav-right{
+        gap:.4rem;
+    }
+
+    .profile-btn{
+        padding:.2rem;
+    }
+}
+
+@media (max-width:360px){
+    .brand{
+        font-size:1.25rem;
+    }
+
+    .icon-btn,
+    .menu-toggle{
+        width:34px;
+        height:34px;
+    }
+
+    .profile-btn img{
+        width:32px;
+        height:32px;
+    }
+}

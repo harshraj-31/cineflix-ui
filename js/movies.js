@@ -666,9 +666,10 @@ const MovieDB = (() => {
         return {
             ...movie,
             id,
-            poster: `assets/posters/${id}.jpg`,
-            heroImage: `assets/hero/${id}.jpg`,
-            trailer: `assets/trailers/${id}.mp4`,
+            // WebP: posters are 500x750 (they never display wider than ~240px,
+            // so that's already 2x for high-DPI screens); banners are 1920x815.
+            poster: `assets/posters/${id}.webp`,
+            heroImage: `assets/hero/${id}.webp`,
         };
     });
 

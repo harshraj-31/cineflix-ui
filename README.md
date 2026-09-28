@@ -19,10 +19,26 @@ CineFlix UI delivers a premium streaming experience inspired by modern OTT platf
 - **Movie detail modal** with cast, genres, director, writers, awards, box office, and "More Like This"
 - **My List** (favorites) and **Continue Watching** saved in `localStorage`
 - **Light / dark theme** toggle, remembered between visits
-- **Generated poster art** for any title without an image file, so no card ever shows a broken image
+- **Artwork for all 36 titles** as optimized WebP (posters ~37 KB each), with a generated fallback if an image is ever missing
 - **Accessible**: keyboard-navigable cards, focus-trapped dialogs, skip link, screen-reader labels, and `prefers-reduced-motion` support
 - **Touch-friendly**: tap any card to open its details
 - Responsive from small phones to large desktops
+
+---
+
+## Preview
+
+| Home | Browse by genre |
+| --- | --- |
+| ![Home page with hero banner](docs/screenshots/home.webp) | ![Browse page filtered to Sci-Fi](docs/screenshots/browse.webp) |
+| **Movie details** | **Search** |
+| ![Movie detail modal](docs/screenshots/modal.webp) | ![Search results for a cast name](docs/screenshots/search.webp) |
+| **Movie rows** | **Light theme** |
+| ![Trending and New Releases rows](docs/screenshots/rows.webp) | ![Light theme movie details](docs/screenshots/light.webp) |
+
+**Mobile**
+
+![Home, Browse and movie details on a phone](docs/screenshots/mobile.webp)
 
 ---
 
@@ -66,9 +82,12 @@ CineFlix UI delivers a premium streaming experience inspired by modern OTT platf
 cineflix/
 │
 ├── assets/
-│   ├── hero/            # 16:9 banner images
-│   ├── posters/         # 2:3 poster images
-│   └── *.svg            # avatar + legacy placeholders
+│   ├── hero/            # 1920x815 banner images (.webp)
+│   ├── posters/         # 500x750 poster images (.webp)
+│   └── profile-avatar.svg
+│
+├── docs/
+│   └── screenshots/     # images used in this README
 │
 ├── css/
 │   ├── variables.css    # design tokens + light theme overrides
@@ -110,12 +129,13 @@ cineflix/
 - My List, Continue Watching, and Recently Viewed
 - Light / dark theme
 - Keyboard, screen-reader, and touch accessibility pass
-- Generated artwork for titles without images
+- Poster and banner artwork for every title
+- Image optimization: WebP, right-sized posters, lazy-loaded cards, high-priority hero
+- Screenshots in this README
 
 ### In Progress
 
-- Real poster art for the remaining catalog titles
-- Performance optimization (image sizes, lazy loading of hero)
+- UI refinements
 - Additional movie categories
 
 ---
@@ -139,11 +159,11 @@ No additional installation or dependencies are required. (An internet connection
 - [x] Improve search experience
 - [x] Improve accessibility
 - [x] Add more movie categories (Top Rated, Recently Viewed, genre filters)
-- [x] Enhance responsiveness (touch support)
+- [x] Enhance responsiveness (touch support, 320px phones and up)
+- [x] Add artwork for all 36 titles
+- [x] Optimize images (WebP, right-sized posters)
+- [x] Add screenshots to this README
 - [ ] Complete UI polish
-- [ ] Add real artwork for all 36 titles
-- [ ] Optimize images (WebP, responsive `srcset`)
-- [ ] Add screenshots to this README
 - [ ] Deploy live demo (GitHub Pages)
 
 ---

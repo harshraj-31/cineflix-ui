@@ -162,15 +162,12 @@ const formatRuntime = (minutes = 0) => {
 /* ----------------------------------------------------------------------
    Generated poster / banner artwork
    ----------------------------------------------------------------------
-   Only 10 of the 36 catalog entries ship with real artwork under
-   assets/. Every other card used to fall back to the SAME flat grey
-   assets/placeholder-poster.svg, so two thirds of the site looked like a
-   batch of broken images rather than a designed empty state.
-
-   Instead we synthesize a poster per movie: a deterministic two-stop
-   gradient (hue derived from the title, so a given movie always gets the
-   same artwork) with the title set over it. It's a data: URI, so there's
-   no extra network request and nothing new to commit to the repo.
+   Fallback for any movie whose image file is missing (e.g. a title added
+   to movies.js before its artwork exists). Instead of one flat grey
+   placeholder for every such card, we synthesize a poster per movie: a
+   deterministic two-stop gradient (hue derived from the title, so a given
+   movie always gets the same artwork) with the title set over it. It's a
+   data: URI, so there's no extra network request.
    ---------------------------------------------------------------------- */
 
 /**

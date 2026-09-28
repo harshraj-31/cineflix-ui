@@ -125,7 +125,7 @@ const UIManager = (() => {
         const html = `
             <section class="hero" data-movie-id="${escapeHTML(movie.id)}">
                 <div class="hero-background">
-                    <img src="${escapeHTML(movie.heroImage)}" alt="" data-art-variant="hero">
+                    <img src="${escapeHTML(movie.heroImage)}" alt="" width="1920" height="815" fetchpriority="high" decoding="async" data-art-variant="hero">
                 </div>
                 <div class="container">
                     <div class="hero-content">
@@ -205,12 +205,11 @@ const UIManager = (() => {
             : '';
 
         // NOTE: no inline onerror= here any more. A single capture-phase error
-        // listener in app.js swaps in generated artwork for the ~26 catalog
-        // entries that have no real image file, using data-art-variant to pick
-        // the right aspect ratio.
+        // listener in app.js swaps in generated artwork if an image file is
+        // ever missing, using data-art-variant to pick the right aspect ratio.
         const html = `
             <div class="movie-poster">
-                <img src="${escapeHTML(movie.poster)}" alt="${title}" loading="lazy" data-art-variant="poster">
+                <img src="${escapeHTML(movie.poster)}" alt="${title}" width="500" height="750" loading="lazy" decoding="async" data-art-variant="poster">
             </div>
             <div class="movie-overlay">
                 <div class="movie-top">
