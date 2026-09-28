@@ -228,3 +228,17 @@
         font-size:1.7rem;
     }
 }
+
+/* ==========================================================
+   Bug fix - the modal's "My List" button also carries the
+   .favorite-btn class (so app.js / updateFavoriteButton can find
+   it), which made cards.css squash it into a 38px circle with the
+   label wrapping underneath. Restore normal .btn sizing here.
+   ========================================================== */
+.modal-actions .favorite-btn{
+    width:auto;
+    height:auto;
+    display:inline-flex;
+    border-radius:var(--radius-pill);
+    place-items:initial;
+}

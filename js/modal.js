@@ -5,10 +5,20 @@
  * .modal-banner, .modal-close, .modal-body, .modal-header, .modal-poster,
  * .modal-info, .modal-meta, .modal-description, .modal-actions, .modal-section,
  * .cast-list/.cast-chip, .genre-list/.genre-pill, .similar-grid.
+ *
+ * What changed in this revision:
+ *  - Play button works (it had no handler - see data-action="play").
+ *  - Keyboard focus is trapped inside the dialog while it's open.
+ *  - Uses the shared scroll lock, so search + modal can't fight over it.
+ *  - Closing a modal opened from a shared link goes Home instead of calling
+ *    history.back(), which could navigate the visitor off the site.
+ *  - Shows director, writers, awards and box office (already in the data).
+ *  - "More Like This" ranks by genre overlap instead of catalog order.
  */
 const ModalManager = (() => {
     const root = $('#modal-root');
     let lastFocusedElement = null;
+    let releaseFocusTrap = () => {};
 
     /**
      * @private
@@ -18,12 +28,22 @@ const ModalManager = (() => {
     const _buildContent = (movie) => {
         const favorite = StorageManager.isFavorite(movie.id);
         const title = escapeHTML(movie.title);
+        const id = escapeHTML(movie.id);
+        const headingId = `modal-title-${id}`;
+
+        const details = [
+            ['Director', movie.director],
+            ['Writers', (movie.writers || []).join(', ')],
+            ['Awards', movie.awards],
+            ['Box office', movie.boxOffice],
+            ['Ratings', movie.imdbVotes ? `${movie.imdbVotes} votes` : ''],
+        ].filter(([, value]) => value);
 
         const html = `
             <div class="modal-overlay"></div>
-            <div class="movie-modal" role="dialog" aria-modal="true" aria-label="${title} details">
+            <div class="movie-modal" role="dialog" aria-modal="true" aria-labelledby="${headingId}" data-movie-id="${id}">
                 <div class="modal-banner">
-                    <img src="${escapeHTML(movie.heroImage)}" alt="${title}" onerror="this.onerror=null;this.src='assets/placeholder-hero.svg';">
+                    <img src="${escapeHTML(movie.heroImage)}" alt="" data-art-variant="hero">
                 </div>
                 <button class="modal-close" aria-label="Close">
                     <i class="bi bi-x-lg"></i>
@@ -31,22 +51,22 @@ const ModalManager = (() => {
                 <div class="modal-body">
                     <div class="modal-header">
                         <div class="modal-poster">
-                            <img src="${escapeHTML(movie.poster)}" alt="${title}" onerror="this.onerror=null;this.src='assets/placeholder-poster.svg';">
+                            <img src="${escapeHTML(movie.poster)}" alt="${title} poster" data-art-variant="poster">
                         </div>
                         <div class="modal-info">
-                            <h2>${title}</h2>
+                            <h2 id="${headingId}">${title}</h2>
                             <div class="modal-meta">
                                 <span><i class="bi bi-star-fill"></i> ${movie.imdbRating.toFixed(1)}</span>
                                 <span>${movie.year}</span>
                                 <span>${escapeHTML(movie.rated)}</span>
-                                <span>${movie.runtime} min</span>
+                                <span>${escapeHTML(formatRuntime(movie.runtime))}</span>
                             </div>
                             <p class="modal-description">${escapeHTML(movie.plot)}</p>
                             <div class="modal-actions">
-                                <button class="btn btn-primary" data-movie-id="${movie.id}">
+                                <button class="btn btn-primary" data-action="play" data-movie-id="${id}">
                                     <i class="bi bi-play-fill"></i> Play
                                 </button>
-                                <button class="btn btn-secondary favorite-btn" data-movie-id="${movie.id}" aria-label="Toggle My List">
+                                <button class="btn btn-secondary favorite-btn" data-action="favorite" data-movie-id="${id}" aria-pressed="${favorite}">
                                     <i class="bi ${favorite ? 'bi-check-circle-fill' : 'bi-plus-circle'}"></i> My List
                                 </button>
                             </div>
@@ -61,9 +81,16 @@ const ModalManager = (() => {
                     <div class="modal-section">
                         <h3>Genres</h3>
                         <div class="genre-list">
-                            ${movie.genres.map((genre) => `<span class="genre-pill">${escapeHTML(genre)}</span>`).join('')}
+                            ${movie.genres.map((genre) => `<a class="genre-pill" href="/browse/${encodeURIComponent(genre)}" data-navigo>${escapeHTML(genre)}</a>`).join('')}
                         </div>
                     </div>
+                    ${details.length ? `
+                    <div class="modal-section">
+                        <h3>Details</h3>
+                        <dl class="modal-details">
+                            ${details.map(([label, value]) => `<div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd></div>`).join('')}
+                        </dl>
+                    </div>` : ''}
                     <div class="modal-section">
                         <h3>More Like This</h3>
                         <div class="similar-grid" id="similar-grid"></div>
@@ -76,6 +103,10 @@ const ModalManager = (() => {
     };
 
     /**
+     * Fills "More Like This", ranked by how many genres each title shares
+     * with the current one (then by rating). The old version just took the
+     * first six matches in catalog order, so the same few titles showed up
+     * under almost every movie.
      * @private
      * @param {object} movie
      */
@@ -83,16 +114,26 @@ const ModalManager = (() => {
         const container = $('#similar-grid', root);
         if (!container) return;
 
-        const similar = movie.genres
-            .flatMap((genre) => MovieDB.getMoviesByGenre(genre))
-            .filter((m) => m.id !== movie.id);
+        const target = new Set(movie.genres.map((g) => g.toLowerCase()));
 
-        const unique = [...new Map(similar.map((m) => [m.id, m])).values()].slice(0, 6);
-        unique.forEach((m) => {
+        const ranked = MovieDB.getAllMovies()
+            .filter((m) => m.id !== movie.id)
+            .map((m) => ({
+                movie: m,
+                overlap: m.genres.filter((g) => target.has(g.toLowerCase())).length,
+            }))
+            .filter((entry) => entry.overlap > 0)
+            .sort((a, b) => b.overlap - a.overlap || b.movie.imdbRating - a.movie.imdbRating)
+            .slice(0, 6);
+
+        ranked.forEach(({ movie: m }) => {
             const card = UIManager.createMovieCard(m);
             if (card) container.appendChild(card);
         });
     };
+
+    /** @returns {boolean} */
+    const isOpen = () => Boolean(root?.classList.contains('active'));
 
     /**
      * Opens the modal for a given movie ID.
@@ -108,24 +149,35 @@ const ModalManager = (() => {
         const movie = MovieDB.getMovieById(movieId);
         if (!movie || !root) return;
 
+        const wasOpen = isOpen();
         StorageManager.addRecentlyViewed(movieId);
-        lastFocusedElement = document.activeElement;
 
+        // Switching movies from inside the modal ("More Like This") must not
+        // overwrite the element that originally opened it - that element lives
+        // outside the modal and is where focus should return on close.
+        if (!wasOpen) lastFocusedElement = document.activeElement;
+
+        releaseFocusTrap();
         root.innerHTML = '';
         root.appendChild(_buildContent(movie));
         _populateSimilar(movie);
 
         root.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        if (!wasOpen) lockScroll();
 
+        $('.movie-modal', root)?.scrollTo?.(0, 0);
         $('.modal-close', root)?.addEventListener('click', () => close());
         $('.modal-overlay', root)?.addEventListener('click', () => close());
+        releaseFocusTrap = trapFocus($('.movie-modal', root));
         $('.modal-close', root)?.focus();
+
+        // Bind the data-navigo links (genre pills, similar-card titles) we just injected.
+        if (window.AppRouter && typeof AppRouter.refreshLinks === 'function') AppRouter.refreshLinks();
 
         if (updateUrl && window.AppRouter && typeof AppRouter.navigate === 'function') {
             const currentHash = window.location.hash.replace(/^#/, '') || '/';
-            if (currentHash !== `/movie/${movieId}`) {
-                AppRouter.navigate(`/movie/${movieId}`);
+            if (currentHash !== `/movie/${encodeURIComponent(movieId)}`) {
+                AppRouter.navigate(`/movie/${encodeURIComponent(movieId)}`);
             }
         }
     };
@@ -141,15 +193,26 @@ const ModalManager = (() => {
      *   own back/forward navigation.
      */
     const close = ({ goBack = true } = {}) => {
-        if (!root || !root.classList.contains('active')) return;
+        if (!isOpen()) return;
         root.classList.remove('active');
-        document.body.style.overflow = '';
-        setTimeout(() => { root.innerHTML = ''; }, 250);
-        if (lastFocusedElement) lastFocusedElement.focus();
+        releaseFocusTrap();
+        releaseFocusTrap = () => {};
+        unlockScroll();
+        setTimeout(() => { if (!isOpen()) root.innerHTML = ''; }, 250);
+
+        // The opener may have been re-rendered away while the modal was open.
+        if (lastFocusedElement && document.contains(lastFocusedElement)) {
+            lastFocusedElement.focus({ preventScroll: true });
+        }
+        lastFocusedElement = null;
 
         const onMovieRoute = window.location.hash.replace(/^#/, '').startsWith('/movie/');
         if (goBack && onMovieRoute) {
-            if (window.history.length > 1) {
+            // BUG FIX: history.length > 1 is true for ANY tab with history,
+            // including one where the visitor arrived from GitHub or LinkedIn.
+            // Going back from a shared /movie/:id link would take them off the
+            // site. AppRouter.canGoBack() knows whether the previous entry is ours.
+            if (window.AppRouter?.canGoBack?.()) {
                 window.history.back();
             } else if (window.AppRouter && typeof AppRouter.navigate === 'function') {
                 AppRouter.navigate('/');
@@ -158,14 +221,19 @@ const ModalManager = (() => {
     };
 
     /**
-     * Sets up global listeners (Escape to close, favorite toggling inside the modal).
+     * Sets up global listeners (Escape to close).
      */
     const init = () => {
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && root?.classList.contains('active')) close();
+            if (e.key === 'Escape' && isOpen()) {
+                // The modal can sit on top of the search overlay. Stop here so
+                // one Escape press closes only the top-most layer, not both.
+                e.stopImmediatePropagation();
+                close();
+            }
         });
     };
 
-    return { init, open, close };
+    return { init, open, close, isOpen };
 })();
 window.ModalManager = ModalManager;

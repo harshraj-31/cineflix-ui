@@ -339,3 +339,33 @@ body.has-hero .navbar:not(.scrolled) .nav-link.active{
         display:block;
     }
 }
+
+/* ==========================================================
+   Bug fix (revision 3) - on phones/tablets the CLOSED mobile
+   menu still covered the top of the navbar. translateY(-120%)
+   only moves it up by its own height, but it starts BELOW the
+   navbar (top: var(--navbar-height)), so part of it stayed on
+   screen: the "My List" link showed over the logo and the menu
+   sat on top of the hamburger button, swallowing taps. Move it
+   fully off-screen and hide it from pointer + screen readers
+   until it's opened.
+   ========================================================== */
+@media (max-width:992px){
+    .mobile-menu{
+        transform:translateY(calc(-100% - var(--navbar-height)));
+        visibility:hidden;
+        transition:transform var(--transition-normal), visibility 0s linear .35s;
+    }
+
+    .mobile-menu.open{
+        transform:translateY(0);
+        visibility:visible;
+        transition:transform var(--transition-normal), visibility 0s;
+    }
+}
+
+/* The avatar is a flex item, so on narrow screens flexbox shrank its width
+   and it rendered as an oval. */
+.profile-btn img{
+    flex-shrink:0;
+}

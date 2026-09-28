@@ -386,3 +386,193 @@ ul{
         gap:1rem;
     }
 }
+
+/* ==========================================================
+   Revision 3 additions: genre filter, empty states, result
+   counts, modal details, and a light-theme contrast fix.
+   ========================================================== */
+
+/* ---------- Genre filter chips (Browse + search suggestions) ---------- */
+
+.genre-filter{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.6rem;
+    margin-bottom:2rem;
+}
+
+.genre-chip{
+    padding:.5rem 1rem;
+    border-radius:var(--radius-pill);
+    background:var(--bg-glass);
+    border:1px solid var(--border-color);
+    color:var(--text-secondary);
+    font-size:.88rem;
+    font-weight:500;
+    transition:var(--transition-fast);
+}
+
+.genre-chip:hover{
+    color:var(--text-primary);
+    border-color:var(--text-muted);
+}
+
+.genre-chip.active{
+    background:var(--color-primary);
+    border-color:var(--color-primary);
+    color:#fff;
+}
+
+@media (max-width:576px){
+    /* One scrollable line on phones instead of five wrapped rows of chips. */
+    .genre-filter{
+        flex-wrap:nowrap;
+        overflow-x:auto;
+        scrollbar-width:none;
+        padding-bottom:.25rem;
+        margin-inline:calc(var(--container-padding) * -1);
+        padding-inline:var(--container-padding);
+    }
+
+    .genre-filter::-webkit-scrollbar{
+        display:none;
+    }
+
+    .genre-chip{
+        flex:0 0 auto;
+    }
+}
+
+.result-count{
+    color:var(--text-muted);
+    font-size:.9rem;
+    margin:-1rem 0 1.5rem;
+    min-height:1.2em;
+}
+
+#search-root .result-count{
+    margin:-1rem 0 1.5rem 1.5rem;
+}
+
+.search-hint{
+    color:var(--text-secondary);
+    margin-bottom:1rem;
+}
+
+/* ---------- Empty states (My List, search, 404) ---------- */
+
+.empty-state{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:.75rem;
+    padding:4rem 1rem;
+    color:var(--text-secondary);
+}
+
+.empty-state > i{
+    font-size:3rem;
+    color:var(--text-muted);
+    margin-bottom:.5rem;
+}
+
+.empty-state h2{
+    font-family:var(--font-heading);
+    color:var(--text-primary);
+    font-size:1.4rem;
+}
+
+.empty-state p{
+    max-width:42ch;
+}
+
+.empty-state .btn{
+    margin-top:1rem;
+}
+
+/* ---------- Modal: details list + clickable genre pills ---------- */
+
+.modal-details{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:1rem 2rem;
+}
+
+.modal-details dt{
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--text-muted);
+    margin-bottom:.2rem;
+}
+
+.modal-details dd{
+    color:var(--text-secondary);
+}
+
+a.genre-pill{
+    transition:var(--transition-fast);
+}
+
+a.genre-pill:hover{
+    background:rgba(76,201,240,.22);
+}
+
+/* Light theme: .btn-secondary is white-on-translucent-white, which is right
+   over the hero image but invisible on the modal's white surface. */
+.modal-actions .btn-secondary{
+    background:var(--bg-elevated);
+    color:var(--text-primary);
+}
+
+.modal-actions .btn-secondary:hover{
+    background:var(--border-color);
+}
+
+/* Route changes move focus to the page heading for screen readers;
+   don't draw a focus ring around a heading nobody clicked. */
+h1[tabindex="-1"]:focus{
+    outline:none;
+}
+
+/* ---------- Skip link + noscript ---------- */
+
+.skip-link{
+    position:fixed;
+    top:.75rem;
+    left:.75rem;
+    z-index:calc(var(--z-loader) + 1);
+    padding:.7rem 1.2rem;
+    border-radius:var(--radius-pill);
+    background:var(--color-primary);
+    color:#fff;
+    font-weight:600;
+    transform:translateY(-200%);
+    transition:transform var(--transition-fast);
+}
+
+.skip-link:focus{
+    transform:translateY(0);
+}
+
+.noscript-message{
+    padding:2rem;
+    text-align:center;
+    color:var(--text-primary);
+}
+
+#view-root:focus{
+    outline:none;
+}
+
+/* ---------- Home rows alignment ---------- */
+
+/* .main-content (the wrapper router.js puts every page's rows in) had no
+   rules at all, so on Home the rows ran edge-to-edge while the hero text
+   sat inside the container - titles and cards were flush against the
+   screen edge on phones. Align it with .container. */
+.main-content{
+    width:min(100% - (var(--container-padding) * 2),var(--container-width));
+    margin-inline:auto;
+}

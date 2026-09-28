@@ -178,3 +178,22 @@
         display:none;
     }
 }
+
+/* ==========================================================
+   Bug fix - .hero-gradient-bottom is positioned absolutely and
+   comes AFTER .container in the markup, with no z-index. That
+   put a 180px-tall layer on top of the hero's bottom edge -
+   exactly where the Play / More Info buttons sit - so they were
+   dimmed and couldn't be clicked, and the "Scroll" cue was
+   nearly invisible. Send it behind the content (the .hero has
+   isolation:isolate, so -1 stays inside the hero) and make it
+   ignore the pointer.
+   ========================================================== */
+.hero-gradient-bottom{
+    z-index:-1;
+    pointer-events:none;
+}
+
+.hero-scroll{
+    pointer-events:none;
+}

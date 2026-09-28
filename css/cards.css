@@ -265,3 +265,127 @@
     }
 
 }
+
+/* ==========================================================
+   Accessibility + touch fixes (revision 3)
+   ----------------------------------------------------------
+   The overlay (Play / Info / My List) was only ever revealed on
+   :hover. Keyboard users tabbed into invisible buttons, and touch
+   screens - which have no hover - could never see them at all.
+   ========================================================== */
+
+/* Keyboard: reveal the overlay whenever focus is inside the card. */
+.movie-card:focus-within .movie-overlay{
+    opacity:1;
+}
+
+/* Ring only for keyboard focus - :focus-within alone would also light up
+   after every mouse click on the My List button. */
+.movie-card:has(:focus-visible){
+    box-shadow:var(--shadow-lg), 0 0 0 2px var(--color-accent);
+}
+
+/* Touch: tapping the card now opens details (app.js), so keep just the
+   top row (rating + My List) visible and hide the hover-only action row.
+   Also disable the hover lift, which "sticks" after a tap on mobile. */
+@media (hover:none){
+    .movie-card:hover{
+        transform:none;
+        box-shadow:var(--shadow-sm);
+    }
+
+    .movie-card:hover .movie-poster img{
+        transform:none;
+    }
+
+    .movie-overlay{
+        opacity:1;
+        background:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 38%);
+        pointer-events:none;
+    }
+
+    .movie-overlay .movie-top{
+        pointer-events:auto;
+    }
+
+    .movie-actions{
+        display:none;
+    }
+}
+
+.movie-top-actions{
+    display:flex;
+    gap:.5rem;
+}
+
+/* Continue Watching dismiss button - same shape as .favorite-btn. */
+.card-dismiss{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    font-size:.85rem;
+    transition:var(--transition-fast);
+}
+
+.card-dismiss:hover{
+    background:rgba(0,0,0,.7);
+}
+
+/* The card title is now a real link to /movie/:id (shareable, and
+   middle-click / "open in new tab" work). Keep it looking like a title. */
+.movie-title a{
+    color:inherit;
+}
+
+.movie-title a:hover{
+    text-decoration:underline;
+    text-underline-offset:3px;
+}
+
+.movie-meta{
+    gap:.5rem;
+}
+
+.movie-runtime{
+    color:var(--text-muted);
+}
+
+.progress-label{
+    display:block;
+    margin-top:.4rem;
+    font-size:.72rem;
+    color:var(--text-muted);
+}
+
+/* Search results that matched on something other than the title. */
+.match-reason{
+    margin-top:.6rem;
+    font-size:.75rem;
+    color:var(--color-accent);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* Grid layouts (Browse filter, My List, search, "More Like This"):
+   the flex-basis above is meaningless inside a grid, so let cards fill. */
+.movie-grid .movie-card,
+.similar-grid .movie-card{
+    width:100%;
+}
+
+/* Phone-width cards (~150-170px) are too narrow for year + runtime +
+   rating on one line; runtime is still shown in the detail modal. */
+@media (max-width:768px){
+    .movie-runtime{
+        display:none;
+    }
+}
+
+.movie-meta span{
+    white-space:nowrap;
+}

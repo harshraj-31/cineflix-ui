@@ -25,7 +25,7 @@ const UIManager = (() => {
      */
     const createNavbar = () => {
         const html = `
-            <nav class="navbar">
+            <nav class="navbar" aria-label="Primary">
                 <div class="container">
                     <div class="nav-left">
                         <a href="/" class="brand" data-navigo aria-label="CineFlix Home">Cine<span>Flix</span></a>
@@ -43,23 +43,23 @@ const UIManager = (() => {
                             <i class="bi ${StorageManager.getTheme() === 'dark' ? 'bi-moon-stars' : 'bi-sun'}"></i>
                         </button>
                         <div style="position:relative;">
-                            <button class="profile-btn" aria-label="Profile menu">
+                            <button class="profile-btn" aria-label="Profile menu" aria-haspopup="true" aria-expanded="false">
                                 <img src="assets/profile-avatar.svg" alt="User profile">
                                 <span class="profile-name">Guest</span>
                             </button>
-                            <div class="profile-menu">
-                                <a href="#">Account</a>
-                                <a href="#">Help Center</a>
-                                <a href="#">Sign Out</a>
+                            <div class="profile-menu" role="menu">
+                                <a href="#" data-demo-link role="menuitem">Account</a>
+                                <a href="#" data-demo-link role="menuitem">Help Center</a>
+                                <a href="#" data-demo-link role="menuitem">Sign Out</a>
                             </div>
                         </div>
-                        <button class="menu-toggle icon-btn" aria-label="Toggle menu">
+                        <button class="menu-toggle icon-btn" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
                             <i class="bi bi-list"></i>
                         </button>
                     </div>
                 </div>
             </nav>
-            <div class="mobile-menu">
+            <div class="mobile-menu" id="mobile-menu">
                 <a href="/" class="nav-link" data-navigo>Home</a>
                 <a href="/browse" class="nav-link" data-navigo>Browse</a>
                 <a href="/my-list" class="nav-link" data-navigo>My List</a>
@@ -79,24 +79,24 @@ const UIManager = (() => {
             <div class="footer">
                 <div class="footer-content">
                     <div class="footer-socials">
-                        <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
-                        <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="#" data-demo-link aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" data-demo-link aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" data-demo-link aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" data-demo-link aria-label="YouTube"><i class="bi bi-youtube"></i></a>
                     </div>
                     <ul class="footer-links">
-                        <li><a href="#">Audio Description</a></li>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Gift Cards</a></li>
-                        <li><a href="#">Media Center</a></li>
-                        <li><a href="#">Investor Relations</a></li>
-                        <li><a href="#">Jobs</a></li>
-                        <li><a href="#">Terms of Use</a></li>
-                        <li><a href="#">Privacy</a></li>
-                        <li><a href="#">Legal Notices</a></li>
-                        <li><a href="#">Cookie Preferences</a></li>
-                        <li><a href="#">Corporate Information</a></li>
-                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#" data-demo-link>Audio Description</a></li>
+                        <li><a href="#" data-demo-link>Help Center</a></li>
+                        <li><a href="#" data-demo-link>Gift Cards</a></li>
+                        <li><a href="#" data-demo-link>Media Center</a></li>
+                        <li><a href="#" data-demo-link>Investor Relations</a></li>
+                        <li><a href="#" data-demo-link>Jobs</a></li>
+                        <li><a href="#" data-demo-link>Terms of Use</a></li>
+                        <li><a href="#" data-demo-link>Privacy</a></li>
+                        <li><a href="#" data-demo-link>Legal Notices</a></li>
+                        <li><a href="#" data-demo-link>Cookie Preferences</a></li>
+                        <li><a href="#" data-demo-link>Corporate Information</a></li>
+                        <li><a href="#" data-demo-link>Contact Us</a></li>
                     </ul>
                     <p class="footer-copyright">&copy; ${currentYear} CineFlix, Inc. A portfolio project — not a real streaming service.</p>
                 </div>
@@ -118,10 +118,14 @@ const UIManager = (() => {
 
         const badgeLabel = movie.isNewRelease ? 'New Release' : 'Trending Now';
 
+        // BUG FIX: the hero "Play" button used to be a bare .btn.btn-primary,
+        // but app.js only listened for .play-btn - so it silently did nothing.
+        // Buttons now declare their intent with data-action instead of relying
+        // on a styling class, so the hero keeps its own look and still works.
         const html = `
-            <section class="hero">
+            <section class="hero" data-movie-id="${escapeHTML(movie.id)}">
                 <div class="hero-background">
-                    <img src="${escapeHTML(movie.heroImage)}" alt="${escapeHTML(movie.title)}" onerror="this.onerror=null;this.src='assets/placeholder-hero.svg';">
+                    <img src="${escapeHTML(movie.heroImage)}" alt="" data-art-variant="hero">
                 </div>
                 <div class="container">
                     <div class="hero-content">
@@ -131,14 +135,14 @@ const UIManager = (() => {
                         <div class="hero-meta">
                             <span><i class="bi bi-star-fill"></i> ${movie.imdbRating.toFixed(1)}</span>
                             <span>${movie.year}</span>
-                            <span>${movie.rated}</span>
-                            <span>${movie.runtime} min</span>
+                            <span>${escapeHTML(movie.rated)}</span>
+                            <span>${escapeHTML(formatRuntime(movie.runtime))}</span>
                         </div>
                         <div class="hero-actions">
-                            <button class="btn btn-primary" data-movie-id="${movie.id}">
+                            <button class="btn btn-primary" data-action="play" data-movie-id="${escapeHTML(movie.id)}">
                                 <i class="bi bi-play-fill"></i> Play
                             </button>
-                            <button class="btn btn-secondary btn-modal" data-movie-id="${movie.id}">
+                            <button class="btn btn-secondary btn-modal" data-action="info" data-movie-id="${escapeHTML(movie.id)}">
                                 <i class="bi bi-info-circle"></i> More Info
                             </button>
                         </div>
@@ -176,41 +180,64 @@ const UIManager = (() => {
         });
 
         // Continue Watching rows pass a 0-100 progress value so the card can
-        // show the .watch-progress bar already styled in cards.css.
-        const progressHTML = typeof options.progress === 'number'
+        // show the .watch-progress bar already styled in cards.css. Those rows
+        // also get a dismiss control - StorageManager.removeFromContinueWatching()
+        // existed from the start but nothing in the UI ever called it, so an
+        // entry could be added and never removed.
+        const hasProgress = typeof options.progress === 'number';
+        const progressValue = hasProgress ? Math.max(0, Math.min(100, options.progress)) : 0;
+        const progressHTML = hasProgress
             ? `
                 <div class="watch-progress">
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width:${Math.max(0, Math.min(100, options.progress))}%"></div>
+                    <div class="progress-track" role="progressbar" aria-label="Watch progress"
+                         aria-valuenow="${progressValue}" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-fill" style="width:${progressValue}%"></div>
                     </div>
+                    <span class="progress-label">${progressValue}% watched</span>
                 </div>
             `
             : '';
 
+        const dismissHTML = hasProgress
+            ? `<button class="card-dismiss" data-action="remove-continue" aria-label="Remove ${title} from Continue Watching">
+                   <i class="bi bi-x-lg"></i>
+               </button>`
+            : '';
+
+        // NOTE: no inline onerror= here any more. A single capture-phase error
+        // listener in app.js swaps in generated artwork for the ~26 catalog
+        // entries that have no real image file, using data-art-variant to pick
+        // the right aspect ratio.
         const html = `
             <div class="movie-poster">
-                <img src="${escapeHTML(movie.poster)}" alt="${title}" loading="lazy" onerror="this.onerror=null;this.src='assets/placeholder-poster.svg';">
+                <img src="${escapeHTML(movie.poster)}" alt="${title}" loading="lazy" data-art-variant="poster">
             </div>
             <div class="movie-overlay">
                 <div class="movie-top">
                     <span class="movie-badge">${escapeHTML(movie.rated)}</span>
-                    <button class="favorite-btn" aria-label="${favoriteLabel}">
-                        <i class="bi ${favoriteIcon}"></i>
-                    </button>
+                    <div class="movie-top-actions">
+                        ${dismissHTML}
+                        <button class="favorite-btn" data-action="favorite" aria-label="${favoriteLabel}">
+                            <i class="bi ${favoriteIcon}"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="movie-actions">
-                    <button class="play-btn" aria-label="Play ${title}">
+                    <button class="play-btn" data-action="play" aria-label="Play ${title}">
                         <i class="bi bi-play-fill"></i> Play
                     </button>
-                    <button class="info-btn btn-modal" aria-label="More info about ${title}">
+                    <button class="info-btn btn-modal" data-action="info" aria-label="More info about ${title}">
                         <i class="bi bi-info-circle"></i> Info
                     </button>
                 </div>
             </div>
             <div class="movie-content">
-                <h3 class="movie-title">${title}</h3>
+                <h3 class="movie-title">
+                    <a href="/movie/${encodeURIComponent(movie.id)}" data-navigo tabindex="-1">${title}</a>
+                </h3>
                 <div class="movie-meta">
                     <span>${movie.year}</span>
+                    <span class="movie-runtime">${escapeHTML(formatRuntime(movie.runtime))}</span>
                     <span class="rating"><i class="bi bi-star-fill"></i> ${movie.imdbRating.toFixed(1)}</span>
                 </div>
                 <div class="genre-tags">
@@ -325,6 +352,12 @@ const UIManager = (() => {
         }
         ROOT_ELEMENTS.view.appendChild(content);
 
+        // Row ids only need to be unique within the page that's on screen.
+        // Previously this Set was never cleared, so every Home -> Browse ->
+        // Home round trip minted new ids (row-action-2, row-action-3, ...)
+        // and the Set grew for the lifetime of the tab.
+        _usedRowIds.clear();
+
         // Let Navigo bind data-navigo links that were just added to the DOM.
         // NOTE: AppRouter/MovieDB/StorageManager are declared with top-level `const` in
         // their own files, so - unlike `var` - they are never attached to `window`.
@@ -345,7 +378,7 @@ const UIManager = (() => {
      * @param {boolean} isFavorite
      */
     const updateFavoriteButton = (movieId, isFavorite) => {
-        const buttons = $all(`.movie-card[data-movie-id="${movieId}"] .favorite-btn`);
+        const buttons = $all(`.movie-card[data-movie-id="${CSS.escape(movieId)}"] .favorite-btn`);
         buttons.forEach((button) => {
             const icon = button.querySelector('i');
             if (!icon) return;
@@ -361,13 +394,63 @@ const UIManager = (() => {
         });
 
         // Also keep the modal's "My List" button in sync if the modal is open.
-        const modalBtn = $(`#modal-root .favorite-btn[data-movie-id="${movieId}"]`);
+        const modalBtn = $(`#modal-root .favorite-btn[data-movie-id="${CSS.escape(movieId)}"]`);
         if (modalBtn) {
             const icon = modalBtn.querySelector('i');
             if (icon) {
                 icon.className = `bi ${isFavorite ? 'bi-check-circle-fill' : 'bi-plus-circle'}`;
             }
+            modalBtn.setAttribute('aria-pressed', String(isFavorite));
         }
+    };
+
+    /**
+     * Builds the "Browse" genre filter bar.
+     * @param {string[]} genres
+     * @param {string} activeGenre - 'All' or a genre name
+     * @returns {HTMLElement}
+     */
+    const createGenreFilter = (genres, activeGenre = 'All') => {
+        const bar = createElement('div', {
+            className: 'genre-filter',
+            role: 'toolbar',
+            'aria-label': 'Filter by genre',
+        });
+
+        ['All', ...genres].forEach((genre) => {
+            const isActive = genre.toLowerCase() === activeGenre.toLowerCase();
+            const chip = createElement('button', {
+                className: `genre-chip${isActive ? ' active' : ''}`,
+                type: 'button',
+                'data-genre': genre,
+                'aria-pressed': String(isActive),
+            }, genre);
+            bar.appendChild(chip);
+        });
+
+        return bar;
+    };
+
+    /**
+     * Builds a friendly empty state block.
+     * @param {string} icon - Bootstrap icon name, without the "bi-" prefix
+     * @param {string} heading
+     * @param {string} body
+     * @param {{label:string, href:string}} [cta]
+     * @returns {HTMLElement}
+     */
+    const createEmptyState = (icon, heading, body, cta) => {
+        const ctaHTML = cta
+            ? `<a href="${escapeHTML(cta.href)}" class="btn btn-primary" data-navigo>${escapeHTML(cta.label)}</a>`
+            : '';
+        const wrapper = createElement('div', { className: 'empty-state' });
+        wrapper.appendChild(fragmentFromHTML(`
+            <i class="bi bi-${escapeHTML(icon)}" aria-hidden="true"></i>
+            <h2>${escapeHTML(heading)}</h2>
+            <p>${escapeHTML(body)}</p>
+            ${ctaHTML}
+        `));
+        return wrapper;
     };
 
     // --- Public API ---
@@ -378,6 +461,8 @@ const UIManager = (() => {
         createMovieRow,
         createMovieCard,
         createSkeletonCard,
+        createGenreFilter,
+        createEmptyState,
         updateFavoriteButton,
         elements: ROOT_ELEMENTS,
     };

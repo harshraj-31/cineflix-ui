@@ -726,6 +726,73 @@ const MovieDB = (() => {
         return [...new Set(allGenres)].sort();
     };
 
+    /**
+     * Retrieves the highest-rated movies.
+     * @param {number} [limit=10]
+     * @returns {Array<object>}
+     */
+    const getTopRated = (limit = 10) =>
+        [...movies].sort((a, b) => b.imdbRating - a.imdbRating).slice(0, limit);
+
+    /**
+     * Searches the catalog across title, cast, director, genre and year.
+     *
+     * Previously search only checked `title.includes(query)`, so typing an
+     * actor's name, a director, or "horror" returned nothing even though the
+     * data was right there. Results are ranked so that title matches always
+     * come first, then people, then genre/year.
+     *
+     * Every whitespace-separated word must match somewhere, so "nolan sci-fi"
+     * narrows results rather than widening them.
+     *
+     * @param {string} query
+     * @returns {Array<{movie: object, matchedOn: string}>} Ranked results.
+     */
+    const searchMovies = (query = '') => {
+        const terms = String(query).toLowerCase().trim().split(/\s+/).filter(Boolean);
+        if (terms.length === 0) return [];
+
+        const results = [];
+
+        movies.forEach((movie) => {
+            const title = movie.title.toLowerCase();
+            const director = (movie.director || '').toLowerCase();
+            const actors = (movie.actors || []).map((a) => a.toLowerCase());
+            const genres = movie.genres.map((g) => g.toLowerCase());
+            const year = String(movie.year);
+
+            let score = 0;
+            let matchedOn = '';
+
+            const allMatched = terms.every((term) => {
+                if (title.startsWith(term)) { score += 100; matchedOn ||= 'title'; return true; }
+                if (title.split(/\s+/).some((w) => w.startsWith(term))) { score += 70; matchedOn ||= 'title'; return true; }
+                if (title.includes(term)) { score += 50; matchedOn ||= 'title'; return true; }
+
+                const actor = actors.find((a) => a.includes(term));
+                if (actor) { score += 40; matchedOn ||= `cast: ${movie.actors[actors.indexOf(actor)]}`; return true; }
+
+                if (director.includes(term)) { score += 35; matchedOn ||= `director: ${movie.director}`; return true; }
+
+                const genre = genres.find((g) => g.startsWith(term));
+                if (genre) { score += 20; matchedOn ||= `genre: ${movie.genres[genres.indexOf(genre)]}`; return true; }
+
+                if (year === term) { score += 15; matchedOn ||= `year: ${year}`; return true; }
+
+                return false;
+            });
+
+            if (allMatched) {
+                // Small rating tiebreaker so equally-relevant results are ordered sensibly.
+                results.push({ movie, matchedOn, score: score + movie.imdbRating });
+            }
+        });
+
+        return results
+            .sort((a, b) => b.score - a.score)
+            .map(({ movie, matchedOn }) => ({ movie, matchedOn }));
+    };
+
     return {
         getAllMovies,
         getMovieById,
@@ -734,5 +801,7 @@ const MovieDB = (() => {
         getPopularMovies,
         getMoviesByGenre,
         getAllGenres,
+        getTopRated,
+        searchMovies,
     };
 })();
